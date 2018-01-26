@@ -168,3 +168,4 @@ dkms.conf
 *.exe
 *.out
 *.app
+paho.mqtt.android/
