@@ -20,9 +20,9 @@ This will be achieved by interfacing with hardware already installed on most ven
     * Experience: 8 month embedded systems co-op with Vermeer
     * Classes: 185, 186, 227, 228, 281, 288, 310
 * Jared: 6th semester
-    * Languages: C, C++, Arduino, Verilog HDL, Python, Java
-    * Experience: 4 month embedded software internship at Vermeer, Team Lead of Avionics based engineering group (Make-2-Innovate)
-    * Classes: 185, 186, 227, 228, 281, 288, 310
+    * Languages: C, C++, Python, Java, Verilog, VHDL, Arduino
+    * Experience: 4 month embedded software internship at Vermeer, Team Lead of Avionics based engineering organization (Make-2-Innovate)
+    * Classes: 185, 186, 227, 228, 281, 288, 310, 381
 * Jonah: 6th semester
     * Languages: C, C++, Java, Javascript, PHP, HTML
     * Experience: 8 month internship in IT with Danfoss Power Solutions.
@@ -33,7 +33,7 @@ This will be achieved by interfacing with hardware already installed on most ven
 
 Java (Android app), mySQL or PHP (back-end database), and C++ (vending machine hardware) 
 
-MQTT, Google Maps API, Android Studio, Visual Studio
+MQTT, Google Maps API, Android Studio, Visual Studio Code
 
 
 ## Complexity:
