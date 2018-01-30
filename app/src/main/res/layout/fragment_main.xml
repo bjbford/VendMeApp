@@ -35,10 +35,11 @@
         android:id="@+id/txtnumOne"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView2"
         android:layout_alignBottom="@+id/textView2"
-        android:layout_alignRight="@+id/textView1"
+        android:layout_toEndOf="@+id/textView3"
         android:ems="2"
-        android:inputType="number" >
+        android:inputType="number">
 
         <requestFocus />
     </EditText>
@@ -57,18 +58,19 @@
         android:id="@+id/button_Add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView3"
-        android:layout_alignRight="@+id/textView3"
-        android:layout_below="@+id/textView3"
-        android:layout_marginTop="46dp"
-        android:text="Add" />
+        android:layout_alignEnd="@+id/textView2"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="36dp"
+        android:text="Calculate" />
+
 
     <EditText
         android:id="@+id/txtnumTwo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/button_Add"
-        android:layout_alignLeft="@+id/txtnumOne"
+        android:layout_alignBaseline="@+id/textView3"
+        android:layout_alignBottom="@+id/textView3"
+        android:layout_alignStart="@+id/txtnumOne"
         android:ems="2"
         android:inputType="number" />
 
