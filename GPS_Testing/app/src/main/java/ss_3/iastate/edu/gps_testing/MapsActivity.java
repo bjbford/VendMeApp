@@ -27,7 +27,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap myMap;
     private static final int myLocationPermissionRequest = 1;
-    static final LatLng TheHub1 = new LatLng(42.027134,-93.648371);     //Vending machine #1 location: Hub
+    //Vending machine #1 location: Hub
+    static final LatLng hubMachine1 = new LatLng(42.027134,-93.648371);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +52,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         myMap = googleMap;
         // Add a vending machine #1 position marker
         // This info will be fetched from database eventually
-        myMap.addMarker(new MarkerOptions().position(TheHub1)
-                                           .title("Hub: Coca-Cola Machine")
-                                           .snippet("Contents: " + "- Coca-Cola" + "- Diet Coke" +
-                                                    "- Cherry Coke" + "- Sprite" + "- Powerade"));
-        //myMap.setOnInfoWindowClickListener(this);
+        myMap.addMarker(new MarkerOptions().position(hubMachine1)
+                                .title("Hub: Coca-Cola Machine")
+                                .snippet("Contents: \n" + "- Coca-Cola\n" + "- Diet Coke\n" +
+                                         "- Cherry Coke\n" + "- Sprite\n" + "- Powerade"));
+        MyInfoWindow customInfo = new MyInfoWindow(this);
+        myMap.setInfoWindowAdapter(customInfo);
+        //myMap.setOnInfoWindowClickListener();
         startLocation();
 //        LatLng deviceLocation = myMap.getCameraPosition().target;
 //        myMap.moveCamera(CameraUpdateFactory.newLatLng(deviceLocation));
@@ -87,9 +90,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      * Helper function to check fine location permission and request permission if not granted.
      */
     public void startLocation(){
-        if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+        if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED){
             //Request permission
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},myLocationPermissionRequest);
+            ActivityCompat.requestPermissions(this,new String[]{
+                            Manifest.permission.ACCESS_FINE_LOCATION},myLocationPermissionRequest);
         }
         else{
             //Permission granted, so enable location
@@ -113,7 +118,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMyLocationClick(@NonNull Location location) {
-        Toast.makeText(this, "Your Device's Current Location:\n" + location, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Your Device's Current Location:\n" + location,
+                Toast.LENGTH_LONG).show();
     }
 
 //    /**
