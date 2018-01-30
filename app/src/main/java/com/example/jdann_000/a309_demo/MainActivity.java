@@ -1,22 +1,23 @@
 package com.example.jdann_000.a309_demo;
 
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.TextView;
+import android.widget.EditText;
+import android.widget.Button;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,10 +36,33 @@ public class MainActivity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
 
+    EditText numOne;
+    EditText numTwo;
+    TextView view_Result;
+    Button button_Add;
+
+    double s1,s2,summation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        numOne = (EditText)findViewById(R.id.txtnumOne);
+        numTwo = (EditText)findViewById(R.id.txtnumTwo);
+        view_Result = (TextView)findViewById(R.id.txtview_Result);
+        button_Add = (Button)findViewById(R.id.button_Add);
+
+        button_Add.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                s1 = Double.parseDouble(numOne.getText().toString());
+                s2 = Double.parseDouble(numTwo.getText().toString());
+                summation = s1 + s2;
+                view_Result.setText(Double.toString(summation));
+            }
+        });
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -60,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -113,8 +136,8 @@ public class MainActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            TextView textView = (TextView) rootView.findViewById(0);
+            textView.setText("");
             return rootView;
         }
     }
@@ -138,8 +161,8 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 3;
+            // Show 2 total pages.
+            return 2;
         }
     }
 }
