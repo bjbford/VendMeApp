@@ -1,6 +1,7 @@
 package ss_3.iastate.edu.gps_testing;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.annotation.NonNull;
@@ -8,6 +9,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -29,6 +32,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final int myLocationPermissionRequest = 1;
     //Vending machine #1 location: Hub
     static final LatLng hubMachine1 = new LatLng(42.027134,-93.648371);
+    private Button settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +68,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //        myMap.moveCamera(CameraUpdateFactory.newLatLng(deviceLocation));
         myMap.setOnMyLocationButtonClickListener(this);
         myMap.setOnMyLocationClickListener(this);
+        settings = (Button) findViewById(R.id.settingsBtn);
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //go to submit new machine view
+                Intent settings = new Intent(MapsActivity.this,SubmitNewMachineActivity.class);
+                MapsActivity.this.startActivity(settings);
+            }
+        });
     }
 
     /**

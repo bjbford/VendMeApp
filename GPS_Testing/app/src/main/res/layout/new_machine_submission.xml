@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="39dp"
+        android:text="Please enter the required machine information. Thank you for your help!"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/BuildingName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textShortMessage"
+        android:text="Name of Building..."
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/MachineType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textShortMessage"
+        android:text="Type of Machine..."
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/LocationDesc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textLongMessage"
+        android:text="Description of Machine Location..."
+        android:textSize="14sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Please add contents and prices."
+        android:textAlignment="textStart"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/Submission"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Submit New Machine" />
+
+    <TextView
+        android:id="@+id/DisplayResults"
+        android:layout_width="match_parent"
+        android:layout_height="284dp"
+        android:text="TextView" />
+
+</LinearLayout>
