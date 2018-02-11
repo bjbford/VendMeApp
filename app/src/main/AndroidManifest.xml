@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
 
+    <!-- MAIN APPLICATION SPECIFICATIONS-->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -20,7 +21,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!-- App Boot Screen. Also is the parent to all other activities. -->
+
+        <!-- APP PARENT (Screen boots to this activity) -->
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,17 +31,17 @@
             </intent-filter>
         </activity>
 
-        <meta-data android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
 
+
+        <!-- USED FOR GOOGLE MAPS -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <!-- This is the child map activity.-->
-        <activity
-            android:name=".MapsActivity"
-            android:label="@string/title_activity_maps">
+
+        <!-- Child activity to the parent. This is triggered by Send Button being pressed. -->
+        <activity android:name=".DisplayMessageActivity"
+            android:parentActivityName=".MainActivity">
 
             <!-- The below "data tag" is a requirement if the app is going to support API levels 15 and lower. -->
             <meta-data
