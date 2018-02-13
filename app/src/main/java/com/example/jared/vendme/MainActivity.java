@@ -3,6 +3,7 @@ package com.example.jared.vendme;
 import android.content.Intent;
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 
 /**
@@ -23,6 +25,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     //Google Maps Object.
     private GoogleMap mMap;
+
+    //View button "Search This Area"
+    View button;
 
     //String used for file linkage.
     public static final String EXTRA_MESSAGE = "com.example.jared.vendme";
@@ -43,6 +48,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         // Obtain the SupportMapFragment.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        //Sets "Search This Area" to be invisible and therefore, does not let the user proceed through the app.
+        button = findViewById(R.id.button);
+        button.setVisibility(View.GONE);
     }
 
 
@@ -56,8 +65,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         //Creation of intent object. This object (from my understanding) can peek into the class and see its requirements and variables.
         Intent intent = new Intent(this, DisplayMessageActivity.class);
 
+        Location currentLocation = new Location(mMap.getMyLocation());
+
         //Loads message to be displayed in next activity screen.
-        intent.putExtra(EXTRA_MESSAGE, "working");
+        intent.putExtra(EXTRA_MESSAGE, "");
 
         //Starts activity DisplayMessageActivity.
         startActivity(intent);
@@ -85,11 +96,14 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.addMarker(new MarkerOptions().position(startLocation).title("Iowa State University"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(startLocation));
 
-
         //Checks to see if user has previously given the app persmission to use the GPS location.
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+
             //Sets map to current position.
             mMap.setMyLocationEnabled(true);
+
+            //Sets "Search This Area" button to visible. Allows user to now click this button and proceed to the next page.
+            button.setVisibility(View.VISIBLE);
         }
         else{
             //Prompts user for permission
@@ -101,6 +115,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
             //Sets map to current position.
             mMap.setMyLocationEnabled(true);
+
+            //Sets "Search This Area" button to visible. Allows user to now click this button and proceed to the next page.
+            button.setVisibility(View.VISIBLE);
+
         }
 
         //Forces map to satellite view.
