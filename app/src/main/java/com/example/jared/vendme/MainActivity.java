@@ -150,6 +150,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(myWebView);
         myWebView.loadUrl("http://www.google.com");
 
+        //This is a comment. Testing co-author github functionality.
         Intent intent = new Intent();
 
         return false;
