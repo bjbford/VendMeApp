@@ -40,7 +40,18 @@
 
 
         <!-- Child activity to the parent. This is triggered by Send Button being pressed. -->
-        <activity android:name=".DisplayMessageActivity"
+        <activity android:name=".MachineSelection"
+            android:parentActivityName=".MainActivity">
+
+            <!-- The below "data tag" is a requirement if the app is going to support API levels 15 and lower. -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+
+
+        <!-- WEBVIEW USED TO VIEW EXTERNAL WEBSITES. -->
+        <activity android:name=".webView"
             android:parentActivityName=".MainActivity">
 
             <!-- The below "data tag" is a requirement if the app is going to support API levels 15 and lower. -->
