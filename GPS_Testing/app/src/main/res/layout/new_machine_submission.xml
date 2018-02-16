@@ -3,22 +3,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_horizontal"
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/SubmitNewMachineTitle"
         android:layout_width="match_parent"
-        android:layout_height="39dp"
-        android:text="Please enter the required machine information. Thank you for your help!"
-        android:textSize="18sp" />
+        android:layout_height="37dp"
+        android:gravity="center"
+        android:text="@string/submit_new_machine_title"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/SubmitNewMachineSubtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/submit_new_machine_str1"
+        android:textColor="@android:color/black"
+        android:textSize="12sp" />
 
     <EditText
         android:id="@+id/BuildingName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:hint="Name of Building..."
         android:inputType="textShortMessage"
-        android:text="Name of Building..."
         android:textSize="14sp" />
 
     <EditText
@@ -26,8 +39,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:hint="Type of Machine..."
         android:inputType="textShortMessage"
-        android:text="Type of Machine..."
         android:textSize="14sp" />
 
     <EditText
@@ -35,27 +48,72 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:hint="Description of Machine Location..."
         android:inputType="textLongMessage"
-        android:text="Description of Machine Location..."
         android:textSize="14sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/MachineLocate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="start"
+            android:layout_marginStart="26dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:text="Machine Location"
+            android:textColor="@android:color/background_light"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/MachinePicture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="end"
+            android:layout_marginEnd="26dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:text="Machine Picture"
+            android:textColor="@android:color/background_light"
+            android:textSize="12sp" />
+    </RelativeLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Please add contents and prices."
-        android:textAlignment="textStart"
-        android:textSize="18sp" />
+        android:gravity="center"
+        android:text="@string/submit_new_machine_str2"
+        android:textColor="@android:color/black"
+        android:textSize="14sp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="95">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" />
+    </ScrollView>
+
+    <!--TextView
+        android:id="@+id/DisplayResults"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Submission fields: " /-->
 
     <Button
         android:id="@+id/Submission"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Submit New Machine" />
-
-    <TextView
-        android:id="@+id/DisplayResults"
-        android:layout_width="match_parent"
-        android:layout_height="284dp"
-        android:text="TextView" />
+        android:backgroundTint="@color/colorPrimary"
+        android:text="Submit New Machine"
+        android:textColor="@android:color/background_light" />
 
 </LinearLayout>
