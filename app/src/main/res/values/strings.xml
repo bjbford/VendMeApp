@@ -1,6 +1,15 @@
 <resources>
+
+    <!-- Main Activity -->
     <string name="app_name">VendMe</string>
-    <string name="edit_message">Enter a message</string>
     <string name="button_searchArea">Search This Area</string>
-    <string name="title_activity_maps">Map</string>
+
+    <!-- New Submission Activity -->
+    <string name="submit_new_machine_title">Submit a New Machine</string>
+    <string name="submit_new_machine_str1">Please enter the required machine information. \n
+        Thank you for your help!</string>
+    <string name="submit_new_machine_str2">Please add contents and prices.</string>
+
+    <!-- Machine Selection Activity -->
+    <string name="textView_machine_selection">Vending Machines Found: </string>
 </resources>

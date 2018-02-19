@@ -22,7 +22,19 @@
         android:theme="@style/AppTheme">
 
 
-        <!-- APP PARENT (Screen boots to this activity) -->
+        <!-- This is a "data tag" is a requirement if the app is going to support API levels 15 and lower. -->
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".MainActivity" />
+
+
+        <!-- USED FOR GOOGLE MAPS -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+
+        <!-- APPLICATION PARENT -->
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,35 +44,16 @@
         </activity>
 
 
-
-        <!-- USED FOR GOOGLE MAPS -->
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
-
-
-        <!-- Child activity to the parent. This is triggered by Send Button being pressed. -->
+        <!-- Launched when "Search This Area" button is pressed. -->
         <activity android:name=".MachineSelection"
             android:parentActivityName=".MainActivity">
-
-            <!-- The below "data tag" is a requirement if the app is going to support API levels 15 and lower. -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
         </activity>
 
 
-        <!-- WEBVIEW USED TO VIEW EXTERNAL WEBSITES. -->
-        <activity android:name=".webView"
-            android:parentActivityName=".MainActivity">
-
-            <!-- The below "data tag" is a requirement if the app is going to support API levels 15 and lower. -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+        <!-- Launched when the new submission (WRENCH) button is pressed. -->
+        <activity android:name=".SubmitNewMachineActivity"
+            android:parentActivityName=".MachineSelection">
         </activity>
-
-
 
     </application>
 
