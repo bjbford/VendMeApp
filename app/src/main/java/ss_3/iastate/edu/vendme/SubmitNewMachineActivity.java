@@ -1,4 +1,4 @@
-package com.example.jared.vendme;
+package ss_3.iastate.edu.vendme;
 
 import android.app.Activity;
 import android.content.Intent;

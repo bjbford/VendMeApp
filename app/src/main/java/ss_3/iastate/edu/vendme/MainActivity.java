@@ -1,4 +1,4 @@
-package com.example.jared.vendme;
+package ss_3.iastate.edu.vendme;
 
 import android.content.Intent;
 import android.Manifest;
@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.annotation.NonNull;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -122,7 +121,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[]grantResults){
         if(requestCode == MY_PERMISSIONS_REQUEST_LOCATION){
             if(grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults.length>0){
-                // Permission was granted by user
+                // Permission was granted by user.
                 startLocation();
             }
             else{
@@ -139,12 +138,12 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     public void startLocation(){
         if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED){
-            //Request permission
+            //Request permission.
             ActivityCompat.requestPermissions(this,new String[]{
                     Manifest.permission.ACCESS_FINE_LOCATION},MY_PERMISSIONS_REQUEST_LOCATION);
         }
         else{
-            //Permission granted, so enable location
+            //Permission granted, so enable location.
             mMap.setMyLocationEnabled(true);
         }
     }

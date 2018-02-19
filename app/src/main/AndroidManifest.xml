@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.jared.vendme">
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="ss_3.iastate.edu.vendme">
 
 
     <!-- These lines prompt the user to agree to the app accessing and using the below types of data and hardware. -->

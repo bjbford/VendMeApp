@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.jared.vendme.MainActivity">
+    tools:context="ss_3.iastate.edu.vendme.MainActivity">
 
 
     <!-- GOOGLE MAPS  -->
@@ -16,7 +16,7 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        tools:context="com.example.jared.vendme.MainActivity" />
+        tools:context="ss_3.iastate.edu.vendme.MainActivity" />
 
 
     <!-- "Search This Area" -->
