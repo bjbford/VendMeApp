@@ -11,6 +11,7 @@ import com.google.android.gms.maps.model.Marker;
 
 /**
  * Created by bjbford on 1/29/18.
+ *  - Integrated into main application by jdanner.
  */
 
 public class MyInfoWindow implements GoogleMap.InfoWindowAdapter{

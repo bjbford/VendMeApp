@@ -94,7 +94,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         //Adds Google Maps Marker in the ISU Caribou Coffee cafe..
         mMap.addMarker(new MarkerOptions().position(hubMachine1)
                 .title("Hub: Coca-Cola Machine")
-                .snippet("Contents: \n" + "- Coca-Cola\n" + "- Diet Coke\n" +
+                //Putting a new line after the title does not change anything. Its a different object than the snippet.
+                //Putting the \n before contents lowers it, but does not return it to the left hand side.
+                //I tried putting "\r" after \n but it does nothing as well.
+                .snippet("\n\nContents: \n" + "- Coca-Cola\n" + "- Diet Coke\n" +
                         "- Cherry Coke\n" + "- Sprite\n" + "- Powerade"));
         MyInfoWindow customInfo = new MyInfoWindow(this);
         mMap.setInfoWindowAdapter(customInfo);
