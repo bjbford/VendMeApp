@@ -81,7 +81,7 @@ public class SubmitNewMachineActivity extends Activity {
         machinePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: handle camera permission prompt and launch camera
+                // TODO: Handle retrieval of picture back into the app w/o crash.
                 Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if(takePicture.resolveActivity(getPackageManager()) != null){
                     startActivityForResult(takePicture, REQUEST_PICTURE);
