@@ -43,5 +43,3 @@ int main(int argc, char **argv)
 	mySQLconnect();
 	return 0;
 }
-
-
