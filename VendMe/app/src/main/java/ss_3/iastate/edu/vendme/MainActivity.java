@@ -1,14 +1,17 @@
 package ss_3.iastate.edu.vendme;
 
+import android.content.Context;
 import android.content.Intent;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -101,7 +104,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         MyInfoWindow customInfo = new MyInfoWindow(this);
         mMap.setInfoWindowAdapter(customInfo);
 
-        startLocation();
+        Location deviceLoc = startLocation();
 
         //Forces map to satellite view.
         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
@@ -135,7 +138,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     /**
      * Helper function to check fine location permission and request permission if not granted.
      */
-    public void startLocation(){
+    public Location startLocation(){
         if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED){
             //Request permission.
@@ -145,6 +148,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         else{
             //Permission granted, so enable location.
             mMap.setMyLocationEnabled(true);
+            // gather location of the device
+            LocationManager locMan = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//            Location deviceLocation = locMan.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            Location deviceLocation;
+            if((deviceLocation = locMan.getLastKnownLocation(LocationManager.GPS_PROVIDER)) != null) {
+                return deviceLocation;
+            }
         }
     }
 
