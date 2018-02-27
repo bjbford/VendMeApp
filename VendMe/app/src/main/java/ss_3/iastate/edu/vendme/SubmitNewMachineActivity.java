@@ -1,11 +1,15 @@
 package ss_3.iastate.edu.vendme;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Button;
@@ -13,8 +17,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
+
 
 /**
  * This activity controls the entire New Machine Submission Page, which allows the user to submit
@@ -25,6 +43,7 @@ import org.json.JSONObject;
 
 public class SubmitNewMachineActivity extends Activity {
 
+    private ProgressDialog progressDialog;
     static final int REQUEST_PICTURE = 1; //Request code of 1 for image capture
     private EditText buildingName, machineType, locationDesc;
     private Button submissionBut, machineLocation, machinePicture;
@@ -51,6 +70,11 @@ public class SubmitNewMachineActivity extends Activity {
         submissionBut = (Button) findViewById(R.id.Submission);
 
         imgView = (ImageView) findViewById(R.id.machinePicView);
+
+        progressDialog = new ProgressDialog(this);
+
+        buttonRegister.setOnClickListener(this);
+
 
         submissionBut.setOnClickListener(new View.OnClickListener() {
             @Override
