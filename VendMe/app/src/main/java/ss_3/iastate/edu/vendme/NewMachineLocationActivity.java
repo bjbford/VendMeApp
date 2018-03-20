@@ -46,17 +46,18 @@ public class NewMachineLocationActivity extends MainActivity implements OnMapRea
     public void onMapReady(GoogleMap googleMap) {
         myMap = googleMap;
 
-        Location deviceLocation = startLocation();
+        //Location deviceLocation = startLocation();
+        startLocation();
         addNewMarker = (Button) findViewById(R.id.addMarkerBtn);
         // gather location of the device
-        final LatLng deviceLatLng = new LatLng(deviceLocation.getLatitude(),deviceLocation.getLongitude());
+//        final LatLng deviceLatLng = new LatLng(deviceLocation.getLatitude(),deviceLocation.getLongitude());
 
-        addNewMarker.setOnClickListener((){
-            Marker newMachine = myMap.addMarker(new MarkerOptions()
-                    .title("NewMachine")
-                    .position(deviceLatLng)
-                    .draggable(true));
-        });
+//        addNewMarker.setOnClickListener((){
+//            Marker newMachine = myMap.addMarker(new MarkerOptions()
+//                    .title("NewMachine")
+//                    .position(deviceLatLng)
+//                    .draggable(true));
+//        });
         //TODO: Grab coordinates of marker when the 'OK' button is clicked
 
     }

@@ -104,8 +104,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         MyInfoWindow customInfo = new MyInfoWindow(this);
         mMap.setInfoWindowAdapter(customInfo);
 
-        Location deviceLoc = startLocation();
-
+//        Location deviceLoc = startLocation();
+        startLocation();
         //Forces map to satellite view.
         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
@@ -138,7 +138,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     /**
      * Helper function to check fine location permission and request permission if not granted.
      */
-    public Location startLocation(){
+    public void startLocation(){
         if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED){
             //Request permission.
@@ -149,12 +149,12 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             //Permission granted, so enable location.
             mMap.setMyLocationEnabled(true);
             // gather location of the device
-            LocationManager locMan = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-//            Location deviceLocation = locMan.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            Location deviceLocation;
-            if((deviceLocation = locMan.getLastKnownLocation(LocationManager.GPS_PROVIDER)) != null) {
-                return deviceLocation;
-            }
+//            LocationManager locMan = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+////            Location deviceLocation = locMan.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//            Location deviceLocation;
+//            if((deviceLocation = locMan.getLastKnownLocation(LocationManager.GPS_PROVIDER)) != null) {
+//                return deviceLocation;
+//            }
         }
     }
 

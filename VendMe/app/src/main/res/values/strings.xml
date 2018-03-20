@@ -9,6 +9,8 @@
     <string name="submit_new_machine_str1">Please enter the required machine information. \n
         Thank you for your help!</string>
     <string name="submit_new_machine_str2">Please add contents and prices.</string>
+    <string name="item_name_hint">Item Name...</string>
+    <string name="item_price_hint">$ Item Price...</string>
 
     <!-- Machine Selection Activity -->
     <string name="textView_machine_selection">Vending Machines Found: </string>
