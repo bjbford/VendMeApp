@@ -1,22 +1,16 @@
 package ss_3.iastate.edu.vendme;
 
 import android.content.Intent;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,15 +39,27 @@ public class MachineSelection extends MainActivity {
         //List view filling.
         vendingMachines = new ArrayList<String>();
         vendingMachines.add("Iowa State University");
-        vendingMachines.add("Caribou Coffee");
+        vendingMachines.add("The Hub ");
 
-        MachineList = (ListView) findViewById(R.id.MachineList);
+        MachineList = (ListView) findViewById(R.id.ML);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, vendingMachines);
 
         MachineList.setAdapter(adapter);
 
+        // Set an item click listener for ListView
+        MachineList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                //Creation of intent object.
+                Intent intent = new Intent(MachineSelection.this, MachineDescription.class);
+
+                //Starts activity.
+                MachineSelection.this.startActivity(intent);
+            }
+        });
     }
 
 

@@ -9,7 +9,7 @@ import android.os.Bundle;
  * Created by Jared Danner on 3/16/2018.
  */
 
-public class MachineDescription extends MainActivity {
+public class MachineDescription extends MachineSelection {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

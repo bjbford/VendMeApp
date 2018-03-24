@@ -58,6 +58,9 @@
 
         <!-- #######################  MACHINE SELECTION  ########################################-->
 
+        <activity android:name=".MachineDescription"
+            android:parentActivityName=".MachineSelection">
+        </activity>
 
 
     </application>
