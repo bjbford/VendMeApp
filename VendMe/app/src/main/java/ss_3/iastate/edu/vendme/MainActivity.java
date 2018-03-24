@@ -22,7 +22,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-
+import java.util.ArrayList;
 
 
 /**
@@ -31,6 +31,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback,
                                                                 GoogleMap.OnMyLocationButtonClickListener,
                                                                 GoogleMap.OnMyLocationClickListener{
+    // Local Database of Machines from MySQL server
+    public ArrayList<Machine> MachineDatabase;
 
     //Google Maps Object.
     public GoogleMap mMap;
@@ -56,7 +58,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         // Obtain the SupportMapFragment. Allows use of onMapReady().
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
+        // Initialize Machine Database
+        MachineDatabase = new ArrayList<Machine>();
+        //Pull all Machines from MySQl to local Database
     }
 
 

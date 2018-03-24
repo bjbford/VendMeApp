@@ -14,14 +14,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.content.Context;
-import android.view.View.OnFocusChangeListener;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -33,6 +30,7 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,29 +45,23 @@ import javax.crypto.Mac;
  * Created by bjbford on 2/10/18.
  *   - Integrated into main application by jdanner.
  */
-public class SubmitNewMachineActivity extends Activity implements View.OnClickListener {
+public class SubmitNewMachineActivity extends AppCompatActivity implements View.OnClickListener {
+//public class SubmitNewMachineActivity extends MainActivity, AppCompatActivity {
 
     static final int REQUEST_PICTURE = 1; //Request code of 1 for image capture
-
     private EditText editTextBuildingName, editTextMachineType, editTextLocationDesc;
-    private Button submissionButton, machineLocation, machinePicture, itemAdd;
+    private EditText inItemName, inItemPrice;
+    private Button submissionButton, machineLocation, machinePicture, buttonAdd;
+    private LinearLayout newRow;
     private ProgressDialog progressDialog;
     private ImageView imgView;
     private Bitmap imgBitmap;
-    private ListView listview;
-    private ArrayAdapter<String> arrAdapt;
+    private ArrayList<String> contentsList, priceList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_machine_submission);
-
-        final ArrayList<String> contents = new ArrayList<String>();
-
-        listview = (ListView) findViewById(R.id.list_view);
-        listview.setAdapter(new customListAdapter(this,R.layout.list_view,contents));
-//        arrAdapt = new ArrayAdapter<String>(this,R.layout.list_view,contents);
-
 
         // Required EditText's
         editTextBuildingName = (EditText) findViewById(R.id.editTextBuildingName);
@@ -80,10 +72,6 @@ public class SubmitNewMachineActivity extends Activity implements View.OnClickLi
         machineLocation = (Button) findViewById(R.id.MachineLocate);
         machinePicture = (Button) findViewById(R.id.MachinePicture);
         submissionButton = (Button) findViewById(R.id.Submission);
-        itemAdd = (Button) findViewById(R.id.itemAdd);
-
-        // TextView only used for debugging
-        //displayResults = (TextView) findViewById(R.id.DisplayResults);
 
         progressDialog = new ProgressDialog(this);
 
@@ -92,39 +80,45 @@ public class SubmitNewMachineActivity extends Activity implements View.OnClickLi
         machinePicture.setOnClickListener(this);
         machineLocation.setOnClickListener(this);
 
-        itemAdd.setOnClickListener(new View.OnClickListener() {
+        // Add contents section
+        inItemName = (EditText) findViewById(R.id.inItemName);
+        inItemPrice = (EditText) findViewById(R.id.inItemPrice);
+        buttonAdd = (Button) findViewById(R.id.add);
+        newRow = (LinearLayout) findViewById(R.id.new_row);
+
+        // ArrayLists to hold contents and prices of new machine.
+        contentsList = new ArrayList<String>();
+        priceList = new ArrayList<String>();
+
+        buttonAdd.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                LayoutInflater li = (LayoutInflater) getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                final View newRow = li.inflate(R.layout.list_view, null);
-                //RelativeLayout rl = (RelativeLayout) findViewById(R.id.list_view);
-                //lv.addView(newRow);
-                arrAdapt.notifyDataSetChanged();
+                LayoutInflater layoutInflater =
+                        (LayoutInflater) getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                final View addView = layoutInflater.inflate(R.layout.list_row, null);
+                TextView itemName = (TextView) addView.findViewById(R.id.itemName);
+                itemName.setText(inItemName.getText().toString());
+                contentsList.add(inItemName.getText().toString());
+                TextView itemPrice = (TextView) addView.findViewById(R.id.itemPrice);
+                itemPrice.setText(inItemPrice.getText().toString());
+                priceList.add(inItemPrice.getText().toString());
+                Button buttonRemove = (Button) addView.findViewById(R.id.remove);
+
+                final View.OnClickListener myListener = new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v) {
+                        ((LinearLayout)addView.getParent()).removeView(addView);
+                        TextView rmName = (TextView) v.findViewById(R.id.itemName);
+                        contentsList.remove(rmName.getText().toString());
+                        TextView rmPrice = (TextView) v.findViewById(R.id.itemPrice);
+                        priceList.remove(rmPrice.getText().toString());
+                    }
+                };
+
+                buttonRemove.setOnClickListener(myListener);
+                newRow.addView(addView);
             }
         });
-        // textViewLogin.setOnClickListener(this);
-    }
-
-    /**
-     * Custom list adapter to dynamically add edit texts to list.
-     * - Created by bjbford on 3/19/18
-     */
-    private class customListAdapter extends ArrayAdapter<String> {
-        private int layout;
-        private List<String> contents;
-
-        private customListAdapter(Context context, int resource, List<String> objects){
-            super(context, resource, objects);
-            contents = objects;
-            layout = resource;
-        }
-
-        // TODO: need to figure out how to addView, can't find any documentation.
-    }
-
-    public class ViewHolder{
-        EditText itemName;
-        EditText itemPrice;
     }
 
     /**
