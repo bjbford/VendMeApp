@@ -3,6 +3,7 @@
     <!-- Main Activity -->
     <string name="app_name">VendMe</string>
     <string name="button_searchArea">Search This Area</string>
+    <string name="textview_SearchBar">Search Item</string>
 
     <!-- New Submission Activity -->
     <string name="submit_new_machine_title">Submit a New Machine</string>
@@ -12,4 +13,5 @@
 
     <!-- Machine Selection Activity -->
     <string name="textView_machine_selection">Vending Machines Found: </string>
+
 </resources>

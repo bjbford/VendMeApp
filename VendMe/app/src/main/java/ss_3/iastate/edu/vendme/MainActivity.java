@@ -1,15 +1,19 @@
 package ss_3.iastate.edu.vendme;
 
+import android.content.Context;
 import android.content.Intent;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -34,6 +38,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     //Maps view object.
     public SupportMapFragment mapFragment;
+
+    //Settings object for the new submission page. (The wrench button).
+    private Button settings;
 
     //Location of the vending machine inside the ISU Caribou Coffee cafe.
     static final LatLng hubMachine1 = new LatLng(42.027134,-93.648371);
@@ -108,6 +115,19 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap.setOnMyLocationButtonClickListener(this);
         mMap.setOnMyLocationClickListener(this);
+
+        //Defines settings object to be that of button "settingsBtn".
+        settings = (Button) findViewById(R.id.settingsBtn);
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Creates intent with the new submissions page.
+                Intent settings = new Intent(MainActivity.this,SubmitNewMachineActivity.class);
+
+                //Launches new activity.
+                MainActivity.this.startActivity(settings);
+            }
+        });
     }
 
 
