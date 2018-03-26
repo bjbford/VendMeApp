@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     tools:context="ss_3.iastate.edu.vendme.MachineDescription"
     android:id="@+id/relativeLayout">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="17dp"
         android:background="@drawable/back"
         android:text=""
@@ -39,9 +39,8 @@
         android:id="@+id/textView"
         android:layout_width="173dp"
         android:layout_height="61dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="48dp"
+        android:layout_alignEnd="@+id/listView"
+        android:layout_alignTop="@+id/imageView"
         android:background="@drawable/back"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
@@ -54,9 +53,8 @@
         android:id="@+id/imageView2"
         android:layout_width="73dp"
         android:layout_height="71dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="156dp"
+        android:layout_alignBottom="@+id/imageView"
+        android:layout_alignStart="@+id/textView"
         android:src="@android:drawable/ic_menu_myplaces"
         app:layout_constraintEnd_toStartOf="@+id/imageView4"
         app:layout_constraintHorizontal_bias="0.592"
@@ -67,10 +65,43 @@
         android:id="@+id/imageView4"
         android:layout_width="73dp"
         android:layout_height="69dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="156dp"
+        android:layout_alignEnd="@+id/textView"
+        android:layout_alignTop="@+id/imageView2"
         android:src="@android:drawable/stat_sys_phone_call_forward"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="TextView"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/listView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.991"
+        tools:layout_editor_absoluteX="120dp"
+        tools:text="@string/description_contents_title" />
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="368dp"
+        android:layout_height="182dp"
+        android:layout_below="@+id/textView2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="11dp"
+        android:background="@drawable/back"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="8dp" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/listView"
+        android:layout_centerHorizontal="true"
+        android:text="Back to Selection" />
+
+</RelativeLayout>

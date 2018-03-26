@@ -17,5 +17,6 @@
     <!-- Machine Description Activity -->
     <string name="description_info">Location: The Hub \n\nTime to Location: 3 mins. </string>
     <string name="description_title">The Hub: Coca-Cola Machine 0.3m</string>
+    <string name="description_contents_title">Machine Contents</string>
 
 </resources>
