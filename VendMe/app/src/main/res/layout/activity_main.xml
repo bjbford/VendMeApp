@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     tools:context="ss_3.iastate.edu.vendme.MainActivity">
 
-
     <!-- GOOGLE MAPS  -->
     <fragment
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -20,7 +19,6 @@
         tools:context="ss_3.iastate.edu.vendme.MainActivity"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="16dp" />
-
 
     <!-- "Search This Area" -->
     <Button

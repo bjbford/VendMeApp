@@ -1,36 +1,29 @@
 package ss_3.iastate.edu.vendme;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationManager;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
+import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
-
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.UiSettings;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
 /**
+ * Activity used to drop a marker where the new machine is located then return to new machine
+ * submission oage.
  * Created by brianbradford on 2/26/18.
  */
 
 public class NewMachineLocationActivity extends MainActivity implements OnMapReadyCallback{
     private GoogleMap myMap;
-    private Button addNewMarker;
+    private Button addNewMarker, submitMarker;
+    private Marker newMachine;
+    private int markerCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,26 +31,41 @@ public class NewMachineLocationActivity extends MainActivity implements OnMapRea
         setContentView(R.layout.activity_new_machine_location);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+                .findFragmentById(R.id.map_newmachine);
         mapFragment.getMapAsync(this);
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         myMap = googleMap;
-
-//        Location deviceLocation = startLocation();
+        markerCount = 0;
+        deviceLocation = startLocation(myMap);
         addNewMarker = (Button) findViewById(R.id.addMarkerBtn);
+        submitMarker = (Button) findViewById(R.id.submitMarker);
         // gather location of the device
-//        final LatLng deviceLatLng = new LatLng(deviceLocation.getLatitude(),deviceLocation.getLongitude());
-
-//        addNewMarker.setOnClickListener((){
-//            Marker newMachine = myMap.addMarker(new MarkerOptions()
-//                    .title("NewMachine")
-//                    .position(deviceLatLng)
-//                    .draggable(true));
-//        });
-        //TODO: Grab coordinates of marker when the 'OK' button is clicked
-
+        final LatLng deviceLatLng = new LatLng(deviceLocation.getLatitude(),deviceLocation.getLongitude());
+        addNewMarker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(markerCount < 1) {
+                    // add new marker if there isn't one on the map already.
+                    newMachine = myMap.addMarker(new MarkerOptions()
+                            .title("NewMachine")
+                            .position(deviceLatLng)
+                            .draggable(true));
+                    markerCount += 1;
+                }
+            }
+        });
+        submitMarker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Return to submit new machine with marker location.
+                Intent back = new Intent();
+                back.putExtra("newMachineLocation",newMachine.getPosition());
+                setResult(Activity.RESULT_OK,back);
+                finish();
+            }
+        });
     }
 }
