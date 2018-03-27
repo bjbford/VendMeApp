@@ -65,7 +65,7 @@
         <!-- Launched when the Machine Location button is pressed. -->
         <activity android:name=".NewMachineLocationActivity"
             android:parentActivityName=".SubmitNewMachineActivity">
-        </activity>
+        </activity>-
 
     </application>
 

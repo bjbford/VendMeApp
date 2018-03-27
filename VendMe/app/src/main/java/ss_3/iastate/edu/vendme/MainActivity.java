@@ -40,6 +40,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     //Maps view object.
     public SupportMapFragment mapFragment;
 
+    protected Button settings;
+
     public Location deviceLocation;
 
     //Location of the vending machine inside the ISU Caribou Coffee cafe.
@@ -63,6 +65,19 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         // Initialize Machine Database
         MachineDatabase = new ArrayList<Machine>();
         //Pull all Machines from MySQl to local Database
+
+        //Defines settings object to be that of button "settingsBtn".
+        settings = (Button) findViewById(R.id.settingsBtn);
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Creates intent with the new submissions page.
+                Intent settings = new Intent(MainActivity.this,SubmitNewMachineActivity.class);
+
+                //Launches new activity.
+                MainActivity.this.startActivity(settings);
+            }
+        });
     }
 
 
@@ -117,19 +132,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap.setOnMyLocationButtonClickListener(this);
         mMap.setOnMyLocationClickListener(this);
-
-        //Defines settings object to be that of button "settingsBtn".
-        settings = (Button) findViewById(R.id.settingsBtn);
-        settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Creates intent with the new submissions page.
-                Intent settings = new Intent(MainActivity.this,SubmitNewMachineActivity.class);
-
-                //Launches new activity.
-                MainActivity.this.startActivity(settings);
-            }
-        });
     }
 
 

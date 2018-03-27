@@ -1,6 +1,7 @@
 package ss_3.iastate.edu.vendme;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;

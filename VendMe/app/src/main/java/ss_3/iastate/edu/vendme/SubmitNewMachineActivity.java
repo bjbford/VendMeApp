@@ -202,9 +202,7 @@ public class SubmitNewMachineActivity extends MainActivity implements View.OnCli
             addToArrayLists(newRow);
             postNewMachine();
             // Return to previous screen
-            Intent settings = new Intent(SubmitNewMachineActivity.this,MachineSelection.class);
-            //Launches new activity.
-            SubmitNewMachineActivity.this.startActivity(settings);
+            finish();
         }
         else if(view == machinePicture){
             // When the user clicks button, prompt permission to use camera and open camera app
