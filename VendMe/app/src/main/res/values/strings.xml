@@ -20,6 +20,6 @@
     <string name="description_contents_title">Machine Contents</string>
     <string name="description_byFoot">On Foot</string>
     <string name="description_byBike">On Bike</string>
-    <string name="description_BackToSelection">BackToSelection</string>
+    <string name="description_BackToSelection">Back To Selection</string>
 
 </resources>
