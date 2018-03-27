@@ -12,14 +12,15 @@
     <string name="submit_new_machine_str2">Please add contents and prices.</string>
 
     <!-- Machine Selection Activity -->
-    <string name="textView_machine_selection">Vending Machines Found: </string>
+    <string name="textView_machine_selection">Vending Machines Found: 3</string>
 
     <!-- Machine Description Activity -->
-    <string name="description_info">Location: The Hub \n\nDistance: 0.3 mi</string>
-    <string name="description_title">The Hub: Coca-Cola Machine</string>
-    <string name="description_contents_title">Machine Contents</string>
-    <string name="description_byFoot">On Foot</string>
-    <string name="description_byBike">On Bike</string>
+    <string name="description_Location">Location: The Hub</string>
+    <string name="description_Distance">Distance: 0.1 mi</string>
+    <string name="description_Title">The Hub: Coca-Cola Machine</string>
+    <string name="description_Contents_title">Machine Contents</string>
+    <string name="description_ByFoot">On Foot</string>
+    <string name="description_ByBike">On Bike</string>
     <string name="description_BackToSelection">Back To Selection</string>
 
 </resources>

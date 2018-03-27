@@ -36,10 +36,11 @@ public class MachineSelection extends MainActivity {
         mapFragment.getMapAsync(this);
 
 
-        //List view filling.
+        //List view filling. Only for show.
         vendingMachines = new ArrayList<String>();
-        vendingMachines.add("Iowa State University");
-        vendingMachines.add("The Hub ");
+        vendingMachines.add("Iowa State University                           0.3 m");
+        vendingMachines.add("The Hub                                                <0.1 m");
+        vendingMachines.add("Coover                                                    0.1 m");
 
         MachineList = (ListView) findViewById(R.id.ML);
 
@@ -55,6 +56,10 @@ public class MachineSelection extends MainActivity {
 
                 //Creation of intent object.
                 Intent intent = new Intent(MachineSelection.this, MachineDescription.class);
+
+                //Uses the position in the List View to tell which Vending Machine it is.
+                //   Passes its machine ID to the new activity.
+                intent.putExtra("MachineID", position);
 
                 //Starts activity.
                 MachineSelection.this.startActivity(intent);
