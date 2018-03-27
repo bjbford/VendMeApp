@@ -13,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -23,7 +24,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
-
 
 /**
  * Main Application Class
@@ -117,6 +117,19 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap.setOnMyLocationButtonClickListener(this);
         mMap.setOnMyLocationClickListener(this);
+
+        //Defines settings object to be that of button "settingsBtn".
+        settings = (Button) findViewById(R.id.settingsBtn);
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Creates intent with the new submissions page.
+                Intent settings = new Intent(MainActivity.this,SubmitNewMachineActivity.class);
+
+                //Launches new activity.
+                MainActivity.this.startActivity(settings);
+            }
+        });
     }
 
 

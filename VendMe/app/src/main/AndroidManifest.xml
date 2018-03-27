@@ -28,12 +28,10 @@
             android:name="android.support.PARENT_ACTIVITY"
             android:value=".MainActivity" />
 
-
         <!-- USED FOR GOOGLE MAPS -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
 
         <!-- APPLICATION PARENT -->
         <activity android:name=".MainActivity">
@@ -45,14 +43,22 @@
         </activity>
 
 
+
+        <!-- #######################  MAIN ACTIVITY  ########################################-->
         <!-- Launched when "Search This Area" button is pressed. -->
         <activity android:name=".MachineSelection"
             android:parentActivityName=".MainActivity">
         </activity>
 
-
         <!-- Launched when the new submission (WRENCH) button is pressed. -->
         <activity android:name=".SubmitNewMachineActivity"
+            android:parentActivityName=".MainActivity">
+        </activity>
+
+
+        <!-- #######################  MACHINE SELECTION  ########################################-->
+
+        <activity android:name=".MachineDescription"
             android:parentActivityName=".MachineSelection">
         </activity>
 

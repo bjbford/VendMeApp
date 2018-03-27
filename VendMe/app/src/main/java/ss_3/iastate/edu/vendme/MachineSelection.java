@@ -1,27 +1,27 @@
 package ss_3.iastate.edu.vendme;
 
 import android.content.Intent;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
-
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MachineSelection extends MainActivity {
 
-    //Settings object for the new submission page. (The wrench button).
-    private Button settings;
+    //Holds all of the vending machiens and their location/distance from user.
+    private ListView MachineList;
 
-    private LatLng userLocation;
+    //Holds the names (Building Location) of each vending machine.
+    private List<String> vendingMachines;
 
 
     @Override
@@ -35,6 +35,36 @@ public class MachineSelection extends MainActivity {
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_sel);
         mapFragment.getMapAsync(this);
 
+
+        //List view filling. Only for show.
+        vendingMachines = new ArrayList<String>();
+        vendingMachines.add("Iowa State University                           0.3 m");
+        vendingMachines.add("The Hub                                                <0.1 m");
+        vendingMachines.add("Coover                                                    0.1 m");
+
+        MachineList = (ListView) findViewById(R.id.ML);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, vendingMachines);
+
+        MachineList.setAdapter(adapter);
+
+        // Set an item click listener for ListView
+        MachineList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                //Creation of intent object.
+                Intent intent = new Intent(MachineSelection.this, MachineDescription.class);
+
+                //Uses the position in the List View to tell which Vending Machine it is.
+                //   Passes its machine ID to the new activity.
+                intent.putExtra("MachineID", position);
+
+                //Starts activity.
+                MachineSelection.this.startActivity(intent);
+            }
+        });
     }
 
 
@@ -70,33 +100,6 @@ public class MachineSelection extends MainActivity {
         //Forces map to satellite view.
         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
-        //Defines settings object to be that of button "settingsBtn".
-        settings = (Button) findViewById(R.id.settingsBtn);
-        settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Creates intent with the new submissions page.
-                Intent settings = new Intent(MachineSelection.this,SubmitNewMachineActivity.class);
-
-                //Launches new activity.
-                MachineSelection.this.startActivity(settings);
-            }
-        });
-
     }
-
-    @Override
-    public void onMyLocationClick(@NonNull Location location) {
-
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 12.0f));
-
-        Location tempLocation = location;
-
-        double tempLat = tempLocation.getLatitude();
-        double tempLon = tempLocation.getLongitude();
-
-        userLocation = new LatLng(tempLat,tempLon);
-    }
-
 
 }
