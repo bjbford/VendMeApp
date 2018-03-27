@@ -65,7 +65,7 @@ public class MachineSelection extends MainActivity {
         MyInfoWindow customInfo = new MyInfoWindow(this);
         mMap.setInfoWindowAdapter(customInfo);
 
-        startLocation();
+        Location deviceLoc = startLocation(mMap);
 
         //Forces map to satellite view.
         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);

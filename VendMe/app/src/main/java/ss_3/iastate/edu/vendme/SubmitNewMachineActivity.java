@@ -5,12 +5,12 @@ import android.app.LauncherActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -27,6 +27,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,7 +35,6 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.crypto.Mac;
@@ -45,10 +45,10 @@ import javax.crypto.Mac;
  * Created by bjbford on 2/10/18.
  *   - Integrated into main application by jdanner.
  */
-public class SubmitNewMachineActivity extends AppCompatActivity implements View.OnClickListener {
-//public class SubmitNewMachineActivity extends MainActivity, AppCompatActivity {
+public class SubmitNewMachineActivity extends MainActivity implements View.OnClickListener {
 
     static final int REQUEST_PICTURE = 1; //Request code of 1 for image capture
+    static final int REQUEST_MARKER = 2; //Request code of 2 for marker return
     private EditText editTextBuildingName, editTextMachineType, editTextLocationDesc;
     private EditText inItemName, inItemPrice;
     private Button submissionButton, machineLocation, machinePicture, buttonAdd;
@@ -57,6 +57,7 @@ public class SubmitNewMachineActivity extends AppCompatActivity implements View.
     private ImageView imgView;
     private Bitmap imgBitmap;
     private ArrayList<String> contentsList, priceList;
+    private LatLng newMachineLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,20 +99,14 @@ public class SubmitNewMachineActivity extends AppCompatActivity implements View.
                 final View addView = layoutInflater.inflate(R.layout.list_row, null);
                 TextView itemName = (TextView) addView.findViewById(R.id.itemName);
                 itemName.setText(inItemName.getText().toString());
-                contentsList.add(inItemName.getText().toString());
                 TextView itemPrice = (TextView) addView.findViewById(R.id.itemPrice);
                 itemPrice.setText(inItemPrice.getText().toString());
-                priceList.add(inItemPrice.getText().toString());
                 Button buttonRemove = (Button) addView.findViewById(R.id.remove);
 
                 final View.OnClickListener myListener = new View.OnClickListener(){
                     @Override
                     public void onClick(View v) {
                         ((LinearLayout)addView.getParent()).removeView(addView);
-                        TextView rmName = (TextView) v.findViewById(R.id.itemName);
-                        contentsList.remove(rmName.getText().toString());
-                        TextView rmPrice = (TextView) v.findViewById(R.id.itemPrice);
-                        priceList.remove(rmPrice.getText().toString());
                     }
                 };
 
@@ -122,6 +117,23 @@ public class SubmitNewMachineActivity extends AppCompatActivity implements View.
     }
 
     /**
+     * Add all contents and prices to proper ArrayLists to be posted to server upon submission.
+     * - Created by bjbford on 3/26/18
+     */
+    private void addToArrayLists(LinearLayout l){
+        // Iterate over all views in LinearLayout
+        for(int i=0;i<l.getChildCount();i++){
+            View v = l.getChildAt(i);
+            TextView itemName = (TextView) v.findViewById(R.id.itemName);
+            // add each content to ArrayList
+            contentsList.add(itemName.getText().toString());
+            TextView itemPrice = (TextView) v.findViewById(R.id.itemPrice);
+            // add each price to ArrayList
+            priceList.add(itemPrice.getText().toString());
+        }
+    }
+
+    /**
      * Connect to Database and POST new machine.
      * - Created by jtbartz on 2/26/18
      */
@@ -129,9 +141,20 @@ public class SubmitNewMachineActivity extends AppCompatActivity implements View.
         final String building = editTextBuildingName.getText().toString().trim();
         final String machineType = editTextMachineType.getText().toString().trim();
         final String description = editTextLocationDesc.getText().toString().trim();
+        double newMachineLat = newMachineLocation.latitude;
+        double newMachineLng = newMachineLocation.longitude;
+        String contents = "";
+        String prices = "";
 
         progressDialog.setMessage("Registering user...");
         progressDialog.show();
+
+        for(String i : contentsList){
+            contents += i + ", ";
+        }
+        for(String j : priceList){
+            prices += j + ", ";
+        }
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 Constants.URL_REGISTER,
@@ -176,6 +199,7 @@ public class SubmitNewMachineActivity extends AppCompatActivity implements View.
     @Override
     public void onClick(View view) {
         if (view == submissionButton) {
+            addToArrayLists(newRow);
             postNewMachine();
             // Return to previous screen
             Intent settings = new Intent(SubmitNewMachineActivity.this,MachineSelection.class);
@@ -184,21 +208,23 @@ public class SubmitNewMachineActivity extends AppCompatActivity implements View.
         }
         else if(view == machinePicture){
             // When the user clicks button, prompt permission to use camera and open camera app
-            // TODO: Handle retrieval of picture back into the app w/o crash.
+            // TODO: Handle retrieval of picture back into the app
             Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             if(takePicture.resolveActivity(getPackageManager()) != null){
                 startActivityForResult(takePicture, REQUEST_PICTURE);
             }
         }
-        else if(view == machineLocation){
+        else if(view == machineLocation) {
             // When the user clicks button, prompt permission for location and open map to plot marker
-            // TODO: merge Jonah's marker code for this and grab coordinates from plot
+            Intent intLocation = new Intent(SubmitNewMachineActivity.this,NewMachineLocationActivity.class);
+            startActivityForResult(intLocation, REQUEST_MARKER);
         }
     }
 
     /**
      * Called on exit of activity invoked by startActivityForResult.
      * This is used to return from using the phones camera app, and handling the picture.
+     * Also used to return from adding a marker indicating the new machine location.
      * @param requestCode
      * @param resultCode
      * @param data
@@ -210,6 +236,9 @@ public class SubmitNewMachineActivity extends AppCompatActivity implements View.
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             //imgView.setImageBitmap(imageBitmap);
             //imgView.setVisibility(View.VISIBLE);
+        }
+        else if (requestCode == REQUEST_MARKER && resultCode == RESULT_OK){
+            newMachineLocation = data.getExtras().getParcelable("newMachineLocation");
         }
     }
 }

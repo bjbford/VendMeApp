@@ -40,6 +40,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     //Maps view object.
     public SupportMapFragment mapFragment;
 
+    public Location deviceLocation;
+
     //Location of the vending machine inside the ISU Caribou Coffee cafe.
     static final LatLng hubMachine1 = new LatLng(42.027134,-93.648371);
 
@@ -108,8 +110,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         MyInfoWindow customInfo = new MyInfoWindow(this);
         mMap.setInfoWindowAdapter(customInfo);
 
-//        Location deviceLoc = startLocation();
-        startLocation();
+        deviceLocation = startLocation(mMap);
+//        startLocation();
         //Forces map to satellite view.
         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
@@ -129,7 +131,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         if(requestCode == MY_PERMISSIONS_REQUEST_LOCATION){
             if(grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults.length>0){
                 // Permission was granted by user.
-                startLocation();
+                deviceLocation = startLocation(mMap);
             }
             else{
                 //Exit application, because we need Location permission to operate.
@@ -142,24 +144,23 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     /**
      * Helper function to check fine location permission and request permission if not granted.
      */
-    public void startLocation(){
+    public Location startLocation(GoogleMap googleMap){
+        Location location;
         if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED){
             //Request permission.
             ActivityCompat.requestPermissions(this,new String[]{
                     Manifest.permission.ACCESS_FINE_LOCATION},MY_PERMISSIONS_REQUEST_LOCATION);
+            location = null;
         }
         else{
             //Permission granted, so enable location.
-            mMap.setMyLocationEnabled(true);
+            googleMap.setMyLocationEnabled(true);
             // gather location of the device
-//            LocationManager locMan = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-////            Location deviceLocation = locMan.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//            Location deviceLocation;
-//            if((deviceLocation = locMan.getLastKnownLocation(LocationManager.GPS_PROVIDER)) != null) {
-//                return deviceLocation;
-//            }
+            LocationManager locMan = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            location = locMan.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         }
+        return location;
     }
 
 

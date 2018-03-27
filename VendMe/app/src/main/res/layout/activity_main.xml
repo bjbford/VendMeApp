@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     tools:context="ss_3.iastate.edu.vendme.MainActivity">
 
-
     <!-- GOOGLE MAPS  -->
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -17,7 +16,6 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         tools:context="ss_3.iastate.edu.vendme.MainActivity" />
-
 
     <!-- "Search This Area" -->
     <Button
@@ -30,9 +28,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-
-
-
 
 </android.support.constraint.ConstraintLayout>
