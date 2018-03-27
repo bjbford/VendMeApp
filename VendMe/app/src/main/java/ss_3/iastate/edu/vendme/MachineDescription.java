@@ -21,9 +21,6 @@ import java.util.List;
 
 public class MachineDescription extends MachineSelection {
 
-    //Back To Selection Button. Takes back to previous activity.
-    private Button Back;
-
     //Holds all of the vending machiens and their location/distance from user.
     private ListView MachineList;
 
@@ -71,16 +68,5 @@ public class MachineDescription extends MachineSelection {
 
         MachineList.setAdapter(adapter);
 
-
-        //Onclick listener for BackToSearch Button.
-        Back = (Button) findViewById(R.id.BackToSearch);
-        Back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                //Closes current activity and returns that which called it.
-                finish();
-            }
-        });
     }
 }

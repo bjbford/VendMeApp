@@ -40,7 +40,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     //Maps view object.
     public SupportMapFragment mapFragment;
 
-    protected Button settings;
+    private Button settings;
 
     public Location deviceLocation;
 

@@ -83,25 +83,14 @@
 
     <ListView
         android:id="@+id/Contents"
-        android:layout_width="368dp"
-        android:layout_height="320dp"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/Price"
         android:layout_marginTop="4dp"
         android:background="@drawable/back"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="8dp" />
-
-    <Button
-        android:id="@+id/BackToSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/Contents"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:textColor="#FFFFFFFF"
-        android:backgroundTint="@color/colorPrimary"
-        android:text="@string/description_BackToSelection" />
 
     <Button
         android:id="@+id/WalkNavigate"
