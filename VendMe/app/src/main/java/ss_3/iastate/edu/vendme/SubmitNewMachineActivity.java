@@ -141,20 +141,21 @@ public class SubmitNewMachineActivity extends MainActivity implements View.OnCli
         final String building = editTextBuildingName.getText().toString().trim();
         final String machineType = editTextMachineType.getText().toString().trim();
         final String description = editTextLocationDesc.getText().toString().trim();
-        double newMachineLat = newMachineLocation.latitude;
-        double newMachineLng = newMachineLocation.longitude;
-        String contents = "";
-        String prices = "";
+        final String newMachineLat = Double.toString(newMachineLocation.latitude);
+        final String newMachineLng = Double.toString(newMachineLocation.longitude);
 
         progressDialog.setMessage("Registering user...");
         progressDialog.show();
-
+        String contents = "";
         for(String i : contentsList){
             contents += i + ", ";
         }
+        String prices = "";
         for(String j : priceList){
             prices += j + ", ";
         }
+        final String contentsFinal = contents;
+        final String pricesFinal = prices;
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 Constants.URL_REGISTER,
@@ -186,6 +187,10 @@ public class SubmitNewMachineActivity extends MainActivity implements View.OnCli
                 params.put("building", building);
                 params.put("type", machineType);
                 params.put("desc", description);
+                params.put("lat",newMachineLat); //wants a string here?
+                params.put("long",newMachineLng); //wants a string here?
+                params.put("contents",contentsFinal);
+                params.put("prices",pricesFinal);
                 return params;
             }
         };
