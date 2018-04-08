@@ -1,11 +1,9 @@
 package ss_3.iastate.edu.vendme;
 
-
 /**
  * Vending Machine Object.
  * Created by brianbradford on 3/23/18.
  */
-
 public class Machine {
 
     private int machine_Number;

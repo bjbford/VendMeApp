@@ -15,8 +15,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
  * Activity used to drop a marker where the new machine is located then return to new machine
- * submission oage.
- * Created by brianbradford on 2/26/18.
+ * submission page.
+ * Created by bjbford on 2/26/18.
  */
 
 public class NewMachineLocationActivity extends MainActivity implements OnMapReadyCallback{
@@ -35,6 +35,10 @@ public class NewMachineLocationActivity extends MainActivity implements OnMapRea
         mapFragment.getMapAsync(this);
     }
 
+    /**
+     * Assigns the Google Maps object with new data.
+     * @param googleMap //Google maps object.
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         myMap = googleMap;

@@ -10,7 +10,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 
 /**
- * Created by bjbford on 1/29/18.
+ * Custom info window that is displayed when a map marker is clicked.
+ *  - Created by bjbford on 1/29/18.
  *  - Integrated into main application by jdanner.
  */
 

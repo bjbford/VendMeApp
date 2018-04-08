@@ -134,7 +134,7 @@ public class SubmitNewMachineActivity extends MainActivity implements View.OnCli
     }
 
     /**
-     * Connect to Database and POST new machine.
+     * Connect to Database and POST new machine. Iterates over contents and prices ArrayList.
      * - Created by jtbartz on 2/26/18
      */
     private void postNewMachine() {

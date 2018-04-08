@@ -1,11 +1,5 @@
 package ss_3.iastate.edu.vendme;
 
-/**
- * Created by JB on 2/20/18.
- *    - Integrated into main application by jdanner.
- */
-
-
 import android.content.Context;
 
 import com.android.volley.Request;
@@ -13,7 +7,11 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
 
-
+/**
+ * PHP string builder for GET request with server. Converted to JSON objects and pushed to PHP files.
+ * - Created by JB on 2/20/18.
+ * - Integrated into main application by jdanner.
+ */
 public class RequestHandler {
     private static RequestHandler mInstance;
     private RequestQueue mRequestQueue;

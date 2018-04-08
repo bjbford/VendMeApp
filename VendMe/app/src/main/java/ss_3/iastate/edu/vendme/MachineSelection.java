@@ -15,10 +15,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Page that displays vending machine results as well as location on map from main page search area or search bar.
+ * - Created by jdanner.
+ */
 public class MachineSelection extends MainActivity {
 
-    //Holds all of the vending machiens and their location/distance from user.
+    //Holds all of the vending machines and their location/distance from user.
     private ListView MachineList;
 
     //Holds the names (Building Location) of each vending machine.
