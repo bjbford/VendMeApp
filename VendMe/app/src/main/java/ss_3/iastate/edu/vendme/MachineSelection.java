@@ -39,7 +39,7 @@ public class MachineSelection extends MainActivity {
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_sel);
         mapFragment.getMapAsync(this);
 
-
+        //TODO: Use Location.distanceBetween() method for approximate distances.
         //List view filling. Only for show.
         vendingMachines = new ArrayList<String>();
         vendingMachines.add("Iowa State University                           0.3 m");

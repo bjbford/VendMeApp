@@ -1,40 +1,30 @@
 package ss_3.iastate.edu.vendme;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * Vending Machine Object.
  * Created by brianbradford on 3/23/18.
  */
 public class Machine {
 
-    private int machine_Number;
     private double locationLat;
     private double locationLng;
     private String building;
     private String machine_Type;
     private String locationDesc;
+    private ArrayList<String> contents;
+    private ArrayList<String> prices;
 
     public Machine(){
-        this.machine_Number = 0;
         this.locationLat = 0.0;
         this.locationLng = 0.0;
         this.building = "";
         this.machine_Type = "";
         this.locationDesc = "";
-    }
-
-    /**
-     * Setter for Machine_Number parameter.
-     * @param num
-     */
-    public void setMachineNumber(int num){
-        machine_Number = num;
-    }
-
-    /**
-     * Getter for Machine_Number parameter.
-     */
-    public int getMachineNumber(){
-        return machine_Number;
+        this.contents = new ArrayList<String>();
+        this.prices = new ArrayList<String>();
     }
 
     /**
@@ -108,20 +98,30 @@ public class Machine {
     }
 
     /**
-     * Pull the contents of a machine from database based on the ID of the machine object that
-     * called this method.
+     * Setter that parses the input string and generates an ArrayList of the Machine's contents.
      */
-    public void pullMachineContents(){
-        // use Machine_Number as ID for table
-        // Update data structure that holds contents
+    public void setMachineContents(String input){
+        contents = (ArrayList<String>) Arrays.asList(input.split(","));
     }
 
     /**
-     * Pull the prices of a machines contents from database based on the ID of the machine object
-     * that called this method.
+     * Getter for the ArrayList of contents, Machine parameter.
      */
-    public void pullMachinePrices(){
-        // use Machine_Number as ID for table
-        // Update data structure that holds prices
+    public ArrayList getMachineContents(){
+        return contents;
+    }
+
+    /**
+     * Setter that parses the input string and generates an ArrayList of the Machine's prices.
+     */
+    public void setMachinePrices(String input){
+        prices = (ArrayList<String>) Arrays.asList(input.split(","));
+    }
+
+    /**
+     * Getter for the ArrayList of prices, Machine parameter.
+     */
+    public ArrayList getMachinePrices(){
+        return prices;
     }
 }

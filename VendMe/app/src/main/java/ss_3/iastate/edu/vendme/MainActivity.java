@@ -21,6 +21,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
@@ -32,7 +33,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                                                                 GoogleMap.OnMyLocationButtonClickListener,
                                                                 GoogleMap.OnMyLocationClickListener{
     // Local Database of Machines from MySQL server
-    public ArrayList<Machine> MachineDatabase;
+    public Machine[] MachineDatabase;
+    public int machineCount;
 
     //Google Maps Object.
     public GoogleMap mMap;
@@ -40,7 +42,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     //Maps view object.
     public SupportMapFragment mapFragment;
 
+    // Main map screen buttons
     private Button settings;
+    private Button searchThisArea;
 
     public Location deviceLocation;
 
@@ -62,9 +66,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         // Obtain the SupportMapFragment. Allows use of onMapReady().
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
         // Initialize Machine Database
-        MachineDatabase = new ArrayList<Machine>();
-        //Pull all Machines from MySQl to local Database
+        machineCount = 0;
+        MachineDatabase = new Machine[machineCount];
+        // TODO: Pull all Machines from MySQl to local Database with method call, using Machine setters.
 
         //Defines settings object to be that of button "settingsBtn".
         settings = (Button) findViewById(R.id.settingsBtn);
@@ -73,26 +79,89 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View view) {
                 //Creates intent with the new submissions page.
                 Intent settings = new Intent(MainActivity.this,SubmitNewMachineActivity.class);
-
                 //Launches new activity.
                 MainActivity.this.startActivity(settings);
+            }
+        });
+
+        //Search this area button
+        searchThisArea = (Button) findViewById(R.id.searchAreaBtn);
+        searchThisArea.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO: check if there is text in the search bar
+                LatLngBounds screenBounds = mMap.getProjection().getVisibleRegion().latLngBounds;
+
+                //Creation of intent object. This object (from my understanding) can peek into the class and see its requirements and variables.
+                Intent intent = new Intent(MainActivity.this, MachineSelection.class);
+                //Starts activity DisplayMessageActivity.
+                MainActivity.this.startActivity(intent);
             }
         });
     }
 
 
     /**
-     * When "Search This Area" is pressed on the home screen, it generates
-     *    a new activity view.
-     * @param view //Access to the view the button resides in.
+     * Called when 'Search this Area' button is clicked, this method uses the bounds of the screen
+     * to search local database for machines.
+     * @param bounds Latitudinal/Longitudinal bounds for map on screen.
+     * @return Array of machines in Area, ordered by closest to deviceLocation.
      */
-    public void searchAreaButton(View view){
+    public Machine[] searchMachinesInArea(LatLngBounds bounds){
+        Machine[] machinesInArea = new Machine[machineCount]; //Do I need this big of a size array or is it dynamic?
+        int counter = 0;
+        // Iterate over all machines in local database
+        for(Machine i : MachineDatabase) {
+            // Check if machine is in screen bounds.
+            if(bounds.contains(new LatLng(i.getLocationLat(), i.getLocationLng()))) {
+                // Add machine in bounds to new Array of Machines
+                machinesInArea[counter++] = i;
+            }
+        }
+        // Return the Array of machines ordered by distance from device.
+        return orderMachinesByDistance(machinesInArea);
+    }
 
-        //Creation of intent object. This object (from my understanding) can peek into the class and see its requirements and variables.
-        Intent intent = new Intent(MainActivity.this, MachineSelection.class);
 
-        //Starts activity DisplayMessageActivity.
-        MainActivity.this.startActivity(intent);
+    /**
+     *  Called when 'Search this Area' button is clicked and the 'Search Bar' contains text of item
+     * that the user is looking for. This will search the local database for machines that contain
+     * the searched item.
+     * @param item String of item to be searched for.
+     * @param bounds Latitudinal/Longitudinal bounds for map on screen.
+     * @return Array of machines in Area that contains the item searched for.
+     */
+    public Machine[] searchByItemInArea(String item, LatLngBounds bounds){
+        Machine[] machinesWithItem = new Machine[machineCount]; //Do I need this big of a size array or is it dynamic?
+        int counter = 0;
+        // Iterate over all machines in local database
+        for(Machine i : MachineDatabase){
+            // Check if machine is in screen bounds and if it contains the item.
+            if(bounds.contains(new LatLng(i.getLocationLat(),i.getLocationLng()))
+                    && i.getMachineContents().contains(item)){
+                // Add machine to new Array of Machines.
+                machinesWithItem[counter++] = i;
+            }
+        }
+        // Return the Array of machines ordered by distance from device.
+        return orderMachinesByDistance(machinesWithItem);
+    }
+
+
+    /**
+     * This method takes in an array of Machines and reorders them based on distance from the
+     * devices location.
+     * @param machines Array of Machines.
+     * @return Machines order by distance from device's location.
+     */
+    public Machine[] orderMachinesByDistance(Machine[] machines){
+        Machine[] ordered = new Machine[machines.length];
+        //TODO: some sorting algorithm by distance.
+//        for(int i = 0;i < input.length;i++){
+//            Location.distanceBetween(deviceLocation.getLatitude(), deviceLocation.getLongitude(),
+//                    input[i].getLocationLat(), input[i].getLocationLng());
+//        }
+        return ordered;
     }
 
 
@@ -126,7 +195,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setInfoWindowAdapter(customInfo);
 
         deviceLocation = startLocation(mMap);
-//        startLocation();
         //Forces map to satellite view.
         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
