@@ -2,6 +2,7 @@ package ss_3.iastate.edu.vendme;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +25,7 @@ public class NewMachineLocationActivity extends MainActivity implements OnMapRea
     private Button addNewMarker, submitMarker;
     private Marker newMachine;
     private int markerCount;
+    private Location myLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,10 @@ public class NewMachineLocationActivity extends MainActivity implements OnMapRea
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map_newmachine);
         mapFragment.getMapAsync(this);
+
+        //Device location passed from main activity/map
+        Bundle bundle = getIntent().getExtras();
+        myLocation = bundle.getParcelable("DeviceLocation");
     }
 
     /**
@@ -43,11 +49,13 @@ public class NewMachineLocationActivity extends MainActivity implements OnMapRea
     public void onMapReady(GoogleMap googleMap) {
         myMap = googleMap;
         markerCount = 0;
-        deviceLocation = startLocation(myMap);
+        //deviceLocation = startLocation(myMap);
         addNewMarker = (Button) findViewById(R.id.addMarkerBtn);
         submitMarker = (Button) findViewById(R.id.submitMarker);
         // gather location of the device
-        final LatLng deviceLatLng = new LatLng(deviceLocation.getLatitude(),deviceLocation.getLongitude());
+        //myLocation = startLocation(myMap);
+        final LatLng deviceLatLng = new LatLng(myLocation.getLatitude(),myLocation.getLongitude());
+        //final LatLng deviceLatLng = new LatLng(deviceLocation.getLatitude(),deviceLocation.getLongitude());
         addNewMarker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

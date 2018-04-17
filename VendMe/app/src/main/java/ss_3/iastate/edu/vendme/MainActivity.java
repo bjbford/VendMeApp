@@ -46,7 +46,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private Button settings;
     private Button searchThisArea;
 
-    public Location deviceLocation;
+    private Location deviceLocation;
 
     //Location of the vending machine inside the ISU Caribou Coffee cafe.
     static final LatLng hubMachine1 = new LatLng(42.027134,-93.648371);
@@ -80,6 +80,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 //Creates intent with the new submissions page.
                 Intent settings = new Intent(MainActivity.this,SubmitNewMachineActivity.class);
                 //Launches new activity.
+                settings.putExtra("DeviceLocation",deviceLocation);
                 MainActivity.this.startActivity(settings);
             }
         });
@@ -156,12 +157,89 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
      */
     public Machine[] orderMachinesByDistance(Machine[] machines){
         Machine[] ordered = new Machine[machines.length];
-        //TODO: some sorting algorithm by distance.
-//        for(int i = 0;i < input.length;i++){
-//            Location.distanceBetween(deviceLocation.getLatitude(), deviceLocation.getLongitude(),
-//                    input[i].getLocationLat(), input[i].getLocationLng());
-//        }
+        //TODO: test mergesort on Machines.
+        merge_sort(ordered,0,ordered.length-1);
         return ordered;
+    }
+
+
+    /**
+     * Recursive merge sort algorithm to sort Machine by distance.
+     * @param arr
+     * @param left
+     * @param right
+     */
+    void merge_sort(Machine arr[], int left, int right){
+        if (left < right){
+            // Find the middle point
+            int mid = (left+right)/2;
+            // Sort first and second sub arrays
+            merge_sort(arr, left, mid);
+            merge_sort(arr , mid+1, right);
+            // Merge the sorted sub arrays
+            merge(arr, left, mid, right);
+        }
+    }
+
+
+    /**
+     * Helper function for the merge sort algorithm to merge sub arrays.
+     * @param arr
+     * @param left
+     * @param mid
+     * @param right
+     */
+    private void merge(Machine arr[], int left, int mid, int right){
+        // Find sizes of two subarrays to be merged
+        int leftSize = mid - left + 1;
+        int rightSize = right - mid;
+        // Temp subarrays
+        Machine subLeft[] = new Machine [leftSize];
+        Machine subRight[] = new Machine [rightSize];
+
+        //Copy data to left subarray
+        for (int i=0; i<leftSize; ++i){
+            subLeft[i] = arr[left + i];
+        }
+        //Copy data to right subarray
+        for (int j=0; j<rightSize; ++j){
+            subRight[j] = arr[mid + 1 + j];
+        }
+        // Initial indexes of first and second subarrays
+        int i = 0, j = 0;
+        // Initial index of merged subarray array
+        int k = left;
+        while (i < leftSize && j < rightSize){
+            Location leftLoc = new Location("");
+            leftLoc.setLatitude(subLeft[i].getLocationLat());
+            leftLoc.setLongitude(subLeft[i].getLocationLng());
+            Location rightLoc = new Location("");
+            rightLoc.setLatitude(subRight[i].getLocationLat());
+            rightLoc.setLongitude(subRight[i].getLocationLng());
+            float leftDist = deviceLocation.distanceTo(leftLoc);
+            float rightDist = deviceLocation.distanceTo(rightLoc);
+            if (leftDist <= rightDist){
+                arr[k] = subLeft[i];
+                i++;
+            }
+            else{
+                arr[k] = subRight[j];
+                j++;
+            }
+            k++;
+        }
+        // Copy remaining elements of left sub array
+        while (i < leftSize){
+            arr[k] = subLeft[i];
+            i++;
+            k++;
+        }
+        // Copy remaining elements of right sub array
+        while (j < rightSize){
+            arr[k] = subRight[j];
+            j++;
+            k++;
+        }
     }
 
 

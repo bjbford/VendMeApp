@@ -58,6 +58,7 @@ public class SubmitNewMachineActivity extends MainActivity implements View.OnCli
     private Bitmap imgBitmap;
     private ArrayList<String> contentsList, priceList;
     private LatLng newMachineLocation;
+    private Location myLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +91,10 @@ public class SubmitNewMachineActivity extends MainActivity implements View.OnCli
         // ArrayLists to hold contents and prices of new machine.
         contentsList = new ArrayList<String>();
         priceList = new ArrayList<String>();
+
+        //Device location passed from main activity/map
+        Bundle bundle = getIntent().getExtras();
+        myLocation = bundle.getParcelable("DeviceLocation");
 
         buttonAdd.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -220,6 +225,7 @@ public class SubmitNewMachineActivity extends MainActivity implements View.OnCli
         else if(view == machineLocation) {
             // When the user clicks button, prompt permission for location and open map to plot marker
             Intent intLocation = new Intent(SubmitNewMachineActivity.this,NewMachineLocationActivity.class);
+            intLocation.putExtra("DeviceLocation",myLocation);
             startActivityForResult(intLocation, REQUEST_MARKER);
         }
     }
