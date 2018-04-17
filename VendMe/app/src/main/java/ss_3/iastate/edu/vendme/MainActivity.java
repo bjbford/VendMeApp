@@ -1,11 +1,13 @@
 package ss_3.iastate.edu.vendme;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -24,6 +26,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -344,6 +350,46 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMyLocationClick(@NonNull Location location) {
         Toast.makeText(this, "Your Device's Current Location:\n" + location,
                 Toast.LENGTH_LONG).show();
+    }
+
+
+    private void register(String username, String password) {
+        String urlSuffix = "?username="+username+"&password="+password;
+        class RegisterUser extends AsyncTask<String, Void, String> {
+
+            ProgressDialog loading;
+
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                loading = ProgressDialog.show(MainActivity.this, "Please Wait",null, true, true);
+            }
+
+
+            @Override
+            protected String doInBackground(String... params) {
+                String s = params[0];
+                BufferedReader bufferedReader = null;
+                try {
+                    URL url = new URL("http://proj-309-ss-3.cs.iastate.edu/android/v1/"+s);
+                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                    bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+                    String result;
+
+                    result = bufferedReader.readLine();
+
+                    return result;
+                }catch(Exception e){
+                    Toast.makeText(getApplicationContext(),"Check your Internet connection",Toast.LENGTH_SHORT).show();
+                    return null;
+                }
+            }
+        }
+
+        RegisterUser ru = new RegisterUser();
+        ru.execute(urlSuffix);
     }
 
 }

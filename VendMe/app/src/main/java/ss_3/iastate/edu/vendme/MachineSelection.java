@@ -45,6 +45,7 @@ public class MachineSelection extends MainActivity {
         vendingMachines.add("Iowa State University                           0.3 m");
         vendingMachines.add("The Hub                                                <0.1 m");
         vendingMachines.add("Coover                                                    0.1 m");
+        vendingMachines.add("TESTING                                                    1.0 m");
 
         MachineList = (ListView) findViewById(R.id.ML);
 
