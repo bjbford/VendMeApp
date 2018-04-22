@@ -13,9 +13,11 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -31,6 +33,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+
+import static android.text.TextUtils.isEmpty;
 
 
 /**
@@ -53,6 +57,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private Button settings;
     private Button searchThisArea;
 
+    private EditText searchBar;
+
     private Location deviceLocation;
 
     //Location of the vending machine inside the ISU Caribou Coffee cafe.
@@ -73,6 +79,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         // Obtain the SupportMapFragment. Allows use of onMapReady().
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        searchBar = (EditText) findViewById(R.id.SearchBar);
 
         // Initialize Machine Database
         machineCount = 0;
@@ -97,9 +105,15 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         searchThisArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: check if there is text in the search bar
                 LatLngBounds screenBounds = mMap.getProjection().getVisibleRegion().latLngBounds;
-
+                //Check which type of search
+                boolean searchBarEmpty = TextUtils.isEmpty(searchBar.getText().toString());
+                if(searchBarEmpty){
+                    searchMachinesInArea(screenBounds);
+                }
+                else {
+                    searchByItemInArea(searchBar.getText().toString(), screenBounds);
+                }
                 //Creation of intent object. This object (from my understanding) can peek into the class and see its requirements and variables.
                 Intent intent = new Intent(MainActivity.this, MachineSelection.class);
                 //Starts activity DisplayMessageActivity.
@@ -266,7 +280,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 //Putting a new line after the title does not change anything. Its a different object than the snippet.
                 //Putting the \n before contents lowers it, but does not return it to the left hand side.
                 //I tried putting "\r" after \n but it does nothing as well.
-                .snippet("\n\nContents: \n" + "- Coca-Cola\n" + "- Diet Coke\n" +
+                .snippet("Contents: \n" + "- Coca-Cola\n" + "- Diet Coke\n" +
                         "- Cherry Coke\n" + "- Sprite\n" + "- Powerade"));
         MyInfoWindow customInfo = new MyInfoWindow(this);
         mMap.setInfoWindowAdapter(customInfo);

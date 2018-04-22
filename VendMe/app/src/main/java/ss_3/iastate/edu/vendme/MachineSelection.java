@@ -41,6 +41,7 @@ public class MachineSelection extends MainActivity {
 
         //TODO: Use Location.distanceBetween() method for approximate distances.
         //List view filling. Only for show.
+
         vendingMachines = new ArrayList<String>();
         vendingMachines.add("Iowa State University                           0.3 m");
         vendingMachines.add("The Hub                                                <0.1 m");
