@@ -9,6 +9,7 @@ import android.location.Location;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -39,6 +40,8 @@ import java.util.Map;
 
 import javax.crypto.Mac;
 
+import static android.text.TextUtils.isEmpty;
+
 /**
  * This activity controls the entire New Machine Submission Page, which allows the user to submit
  * a new machine into our database, upon entering the required information.
@@ -58,7 +61,7 @@ public class SubmitNewMachineActivity extends MainActivity implements View.OnCli
     private Bitmap imgBitmap;
     private ArrayList<String> contentsList, priceList;
     private LatLng newMachineLocation;
-    private Location myLocation;
+//    private Location myLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,8 +96,8 @@ public class SubmitNewMachineActivity extends MainActivity implements View.OnCli
         priceList = new ArrayList<String>();
 
         //Device location passed from main activity/map
-        Bundle bundle = getIntent().getExtras();
-        myLocation = bundle.getParcelable("DeviceLocation");
+//        Bundle bundle = getIntent().getExtras();
+//        myLocation = bundle.getParcelable("DeviceLocation");
 
         buttonAdd.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -209,10 +212,19 @@ public class SubmitNewMachineActivity extends MainActivity implements View.OnCli
     @Override
     public void onClick(View view) {
         if (view == submissionButton) {
-            addToArrayLists(newRow);
-            postNewMachine();
-            // Return to previous screen
-            finish();
+            // Double check they added a machine location and filled in fields!
+            boolean buildNameEmpty = TextUtils.isEmpty(editTextBuildingName.getText().toString());
+            boolean machineTypeEmpty = TextUtils.isEmpty(editTextMachineType.getText().toString());
+            boolean locDescEmpty = TextUtils.isEmpty(editTextLocationDesc.getText().toString());
+            if((newMachineLocation != null) && !buildNameEmpty && !machineTypeEmpty && !locDescEmpty && (newRow.getChildCount() > 0)) {
+                addToArrayLists(newRow);
+                postNewMachine();
+                // Return to previous screen
+                finish();
+            }
+            else{
+                Toast.makeText(this,"You must fill in all information \n and provide a machine location! ",Toast.LENGTH_LONG).show();
+            }
         }
         else if(view == machinePicture){
             // When the user clicks button, prompt permission to use camera and open camera app
@@ -225,8 +237,9 @@ public class SubmitNewMachineActivity extends MainActivity implements View.OnCli
         else if(view == machineLocation) {
             // When the user clicks button, prompt permission for location and open map to plot marker
             Intent intLocation = new Intent(SubmitNewMachineActivity.this,NewMachineLocationActivity.class);
-            intLocation.putExtra("DeviceLocation",myLocation);
+//            intLocation.putExtra("DeviceLocation",myLocation);
             startActivityForResult(intLocation, REQUEST_MARKER);
+//            SubmitNewMachineActivity.this.startActivity(intLocation);
         }
     }
 

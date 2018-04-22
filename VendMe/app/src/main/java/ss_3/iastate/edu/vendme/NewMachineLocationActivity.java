@@ -6,6 +6,8 @@ import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -26,6 +28,7 @@ public class NewMachineLocationActivity extends MainActivity implements OnMapRea
     private Marker newMachine;
     private int markerCount;
     private Location myLocation;
+//    private Location deviceLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +40,8 @@ public class NewMachineLocationActivity extends MainActivity implements OnMapRea
         mapFragment.getMapAsync(this);
 
         //Device location passed from main activity/map
-        Bundle bundle = getIntent().getExtras();
-        myLocation = bundle.getParcelable("DeviceLocation");
+//        Bundle bundle = getIntent().getExtras();
+//        myLocation = bundle.getParcelable("DeviceLocation");
     }
 
     /**
@@ -49,13 +52,15 @@ public class NewMachineLocationActivity extends MainActivity implements OnMapRea
     public void onMapReady(GoogleMap googleMap) {
         myMap = googleMap;
         markerCount = 0;
-        //deviceLocation = startLocation(myMap);
+        //Creates basic (TEMPORARY) marker on ISU to show location.
+        myMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(42.0266, -93.6465)));
+//        deviceLocation = startLocation(myMap);
         addNewMarker = (Button) findViewById(R.id.addMarkerBtn);
         submitMarker = (Button) findViewById(R.id.submitMarker);
         // gather location of the device
-        //myLocation = startLocation(myMap);
+        myLocation = startLocation(myMap);
         final LatLng deviceLatLng = new LatLng(myLocation.getLatitude(),myLocation.getLongitude());
-        //final LatLng deviceLatLng = new LatLng(deviceLocation.getLatitude(),deviceLocation.getLongitude());
+//        final LatLng deviceLatLng = new LatLng(deviceLocation.getLatitude(),deviceLocation.getLongitude());
         addNewMarker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -32,6 +32,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
+
 /**
  * Main Application Class
  */
@@ -86,7 +87,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 //Creates intent with the new submissions page.
                 Intent settings = new Intent(MainActivity.this,SubmitNewMachineActivity.class);
                 //Launches new activity.
-                settings.putExtra("DeviceLocation",deviceLocation);
+//                settings.putExtra("DeviceLocation",deviceLocation);
                 MainActivity.this.startActivity(settings);
             }
         });
@@ -222,29 +223,21 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             Location rightLoc = new Location("");
             rightLoc.setLatitude(subRight[i].getLocationLat());
             rightLoc.setLongitude(subRight[i].getLocationLng());
-            float leftDist = deviceLocation.distanceTo(leftLoc);
-            float rightDist = deviceLocation.distanceTo(rightLoc);
-            if (leftDist <= rightDist){
-                arr[k] = subLeft[i];
-                i++;
+            //Compare distances from device location to Machines
+            if ((deviceLocation.distanceTo(leftLoc)) <= (deviceLocation.distanceTo(rightLoc))){
+                arr[k++] = subLeft[i++];
             }
             else{
-                arr[k] = subRight[j];
-                j++;
+                arr[k++] = subRight[j++];
             }
-            k++;
         }
         // Copy remaining elements of left sub array
         while (i < leftSize){
-            arr[k] = subLeft[i];
-            i++;
-            k++;
+            arr[k++] = subLeft[i++];
         }
         // Copy remaining elements of right sub array
         while (j < rightSize){
-            arr[k] = subRight[j];
-            j++;
-            k++;
+            arr[k++] = subRight[j++];
         }
     }
 
@@ -312,20 +305,30 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
      * Helper function to check fine location permission and request permission if not granted.
      */
     public Location startLocation(GoogleMap googleMap){
-        Location location;
+        Location locationGPS;
+        Location locationNet;
+        Location location = new Location("");
         if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED){
             //Request permission.
             ActivityCompat.requestPermissions(this,new String[]{
                     Manifest.permission.ACCESS_FINE_LOCATION},MY_PERMISSIONS_REQUEST_LOCATION);
-            location = null;
         }
         else{
             //Permission granted, so enable location.
             googleMap.setMyLocationEnabled(true);
             // gather location of the device
             LocationManager locMan = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            location = locMan.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            locationNet = locMan.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            locationGPS = locMan.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            // check if we have location from the network
+            if(locationNet != null){
+                location = locationNet;
+                // check if we have location from GPS (this is preferable)
+                if(locationGPS != null){
+                    location = locationGPS;
+                }
+            }
         }
         return location;
     }
