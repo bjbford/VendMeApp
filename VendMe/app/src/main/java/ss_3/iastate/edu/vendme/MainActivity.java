@@ -360,15 +360,15 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         String urlSuffix = "?username="+username+"&password="+password;
         class RegisterUser extends AsyncTask<String, Void, String> {
 
-            ProgressDialog loading;
+         // ProgressDialog loading;
 
 
-            @Override
+         /*   @Override
             protected void onPreExecute() {
                 super.onPreExecute();
                 loading = ProgressDialog.show(MainActivity.this, "Please Wait",null, true, true);
             }
-
+            */
 
             @Override
             protected String doInBackground(String... params) {
