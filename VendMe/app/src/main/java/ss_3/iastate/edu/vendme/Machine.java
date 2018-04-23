@@ -1,9 +1,6 @@
 package ss_3.iastate.edu.vendme;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 
 /**
  * Vending Machine Object.
@@ -112,7 +109,7 @@ public class Machine {
     /**
      * Getter for the ArrayList of contents, Machine parameter.
      */
-    public ArrayList getMachineContents(){
+    public ArrayList<String> getMachineContents(){
         return contents;
     }
 
@@ -129,7 +126,7 @@ public class Machine {
     /**
      * Getter for the ArrayList of prices, Machine parameter.
      */
-    public ArrayList getMachinePrices(){
+    public ArrayList<String> getMachinePrices(){
         return prices;
     }
 }

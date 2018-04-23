@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import java.lang.Thread;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -37,6 +38,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -48,8 +50,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                                                                 GoogleMap.OnMyLocationButtonClickListener,
                                                                 GoogleMap.OnMyLocationClickListener{
     // Local Database of Machines from MySQL server
-    public Machine[] MachineDatabase;
-    public int machineCount;
+    public static Machine[] MachineDatabase;
+    public static int machineCount=100;
+    public static Machine[] MachineResults;
 
     //Google Maps Object.
     public GoogleMap mMap;
@@ -63,10 +66,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     private EditText searchBar;
 
-    private Location deviceLocation;
-
-    //Location of the vending machine inside the ISU Caribou Coffee cafe.
-    static final LatLng hubMachine1 = new LatLng(42.027134,-93.648371);
+    public Location deviceLocation;
 
     //Used to gather the permission needed for location.
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
@@ -81,34 +81,37 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String tag_string_req1 = "string_req1";
-        String url1 = "http://proj-309-ss-3.cs.iastate.edu/post1.php";
-        StringRequest strReq1 = new StringRequest(Request.Method.GET,
-                url1, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                machineCount = Integer.parseInt(response.trim());
-               // Toast.makeText(getApplicationContext(),machineCount,Toast.LENGTH_LONG).show();
-
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-
-        // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(strReq1, tag_string_req1);
+//        String tag_string_req1 = "string_req1";
+//        String url1 = "http://proj-309-ss-3.cs.iastate.edu/post1.php";
+//        StringRequest strReq1 = new StringRequest(Request.Method.GET,
+//                url1, new Response.Listener<String>() {
+//
+//            @Override
+//            public void onResponse(String response1) {
+//
+//                machineCount = Integer.parseInt(response1.trim());
+//                MachineDatabase = new Machine[machineCount];
+//                for(int i =0; i< MachineDatabase.length; i++) {
+//                    MachineDatabase[i] = new Machine();
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//
+//            }
+//        });
+//
+//        // Adding request to request queue
+//        AppController.getInstance().addToRequestQueue(strReq1, tag_string_req1);
         // Obtain the SupportMapFragment. Allows use of onMapReady().
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
         // Initialize Machine Database
         MachineDatabase = new Machine[machineCount];
-        for(int i =0; i< MachineDatabase.length; i++){
+        for (int i = 0; i < MachineDatabase.length; i++) {
             MachineDatabase[i] = new Machine();
         }
 
@@ -120,22 +123,38 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
             @Override
             public void onResponse(String response) {
-            String[] parts = response.split("/");
-            for(int i=1; i<parts.length; i++) {
-                String part2 = parts[i];
-                String[] args = part2.split("#");
-                // Machine m = new Machine(args[0], args[1], args[2], Double.parseDouble(args[3]), Double.parseDouble(args[4]), contentsList, pricesList);
-                // MachineDatabase[i-1] = new Machine(args[0], args[1], args[2], Double.parseDouble(args[3]), Double.parseDouble(args[4]), contentsList, pricesList);
+                String[] parts = response.split("/");
+                for(int i=1; i<parts.length; i++) {
+                    String part2 = parts[i];
+                    String[] args = part2.split("#");
+                    // Machine m = new Machine(args[0], args[1], args[2], Double.parseDouble(args[3]), Double.parseDouble(args[4]), contentsList, pricesList);
+                    // MachineDatabase[i-1] = new Machine(args[0], args[1], args[2], Double.parseDouble(args[3]), Double.parseDouble(args[4]), contentsList, pricesList);
 
-                MachineDatabase[i-1].setBuilding(args[0]);
-                MachineDatabase[i-1].setLocationDescription(args[1]);
-                MachineDatabase[i-1].setType(args[2]);
-                MachineDatabase[i-1].setLocationLat(Double.parseDouble(args[3]));
-                MachineDatabase[i-1].setLocationLng(Double.parseDouble(args[4]));
-                MachineDatabase[i-1].setMachineContents(args[5]);
-                MachineDatabase[i-1].setMachinePrices(args[6]);
-            }
-                // Toast.makeText(getApplicationContext(),MachineDatabase[2].getBuilding(),Toast.LENGTH_LONG).show();
+                    MachineDatabase[i-1].setBuilding(args[0]);
+                    MachineDatabase[i-1].setLocationDescription(args[1]);
+                    MachineDatabase[i-1].setType(args[2]);
+                    MachineDatabase[i-1].setLocationLat(Double.parseDouble(args[3]));
+                    MachineDatabase[i-1].setLocationLng(Double.parseDouble(args[4]));
+                    MachineDatabase[i-1].setMachineContents(args[5]);
+                    MachineDatabase[i-1].setMachinePrices(args[6]);
+                }
+                for(Machine i : MachineDatabase) {
+                    if(i.getBuilding() != "") {
+                        String snip = "Contents: \n";
+                        ArrayList<String> machineContents = i.getMachineContents();
+                        // Iterate over machine contents ArrayList for custom window popup.
+                        for (int j = 0; j < machineContents.size() - 1; j++) {
+                            snip += (machineContents.get(j) + "\n");
+                        }
+                        // Last content so we don't want a new line after it.
+                        snip += machineContents.get(machineContents.size() - 1);
+                        mMap.addMarker(new MarkerOptions().position(new LatLng(i.getLocationLat(), i.getLocationLng()))
+                                .title(i.getBuilding() + ": " + i.getType())
+                                .snippet(snip));
+                    }
+                }
+                MyInfoWindow customInfo = new MyInfoWindow(MainActivity.this);
+                mMap.setInfoWindowAdapter(customInfo);
 
             }
         }, new Response.ErrorListener() {
@@ -173,14 +192,16 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 //Check which type of search
                 boolean searchBarEmpty = TextUtils.isEmpty(searchBar.getText().toString());
                 if(searchBarEmpty){
-                    searchMachinesInArea(screenBounds);
+                    MachineResults = searchMachinesInArea(screenBounds);
                 }
                 else {
-                    searchByItemInArea(searchBar.getText().toString(), screenBounds);
+                    MachineResults = searchByItemInArea(searchBar.getText().toString(), screenBounds);
                 }
                 //Creation of intent object. This object (from my understanding) can peek into the class and see its requirements and variables.
                 Intent intent = new Intent(MainActivity.this, MachineSelection.class);
                 //Starts activity DisplayMessageActivity.
+                intent.putExtra("lat",deviceLocation.getLatitude());
+                intent.putExtra("lng",deviceLocation.getLongitude());
                 MainActivity.this.startActivity(intent);
             }
         });
@@ -194,7 +215,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
      * @return Array of machines in Area, ordered by closest to deviceLocation.
      */
     public Machine[] searchMachinesInArea(LatLngBounds bounds){
-        Machine[] machinesInArea = new Machine[machineCount]; //Do I need this big of a size array or is it dynamic?
+        Machine[] machinesInArea = new Machine[machineCount];
         int counter = 0;
         // Iterate over all machines in local database
         for(Machine i : MachineDatabase) {
@@ -218,7 +239,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
      * @return Array of machines in Area that contains the item searched for.
      */
     public Machine[] searchByItemInArea(String item, LatLngBounds bounds){
-        Machine[] machinesWithItem = new Machine[machineCount]; //Do I need this big of a size array or is it dynamic?
+        Machine[] machinesWithItem = new Machine[machineCount];
         int counter = 0;
         // Iterate over all machines in local database
         for(Machine i : MachineDatabase){
@@ -234,14 +255,24 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-        /**
-     * This method takes in an array of Machines and reorders them based on distance from the
+    /**
+     * This method takes in an ar
+     * ray of Machines and reorders them based on distance from the
      * devices location.
      * @param machines Array of Machines.
      * @return Machines order by distance from device's location.
      */
     public Machine[] orderMachinesByDistance(Machine[] machines){
-        Machine[] ordered = new Machine[machines.length];
+        //Only copy over valid machines (non-null)
+        int r, w;
+        final int n = r = w = machines.length;
+        while (r > 0) {
+            final Machine s = machines[--r];
+            if (s != null) {
+                machines[--w] = s;
+            }
+        }
+        Machine[] ordered = Arrays.copyOfRange(machines, w, n);
         //TODO: test mergesort on Machines.
         merge_sort(ordered,0,ordered.length-1);
         return ordered;
@@ -254,7 +285,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
      * @param left
      * @param right
      */
-    void merge_sort(Machine arr[], int left, int right){
+    private void merge_sort(Machine arr[], int left, int right){
         if (left < right){
             // Find the middle point
             int mid = (left+right)/2;
@@ -299,8 +330,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             leftLoc.setLatitude(subLeft[i].getLocationLat());
             leftLoc.setLongitude(subLeft[i].getLocationLng());
             Location rightLoc = new Location("");
-            rightLoc.setLatitude(subRight[i].getLocationLat());
-            rightLoc.setLongitude(subRight[i].getLocationLng());
+            rightLoc.setLatitude(subRight[j].getLocationLat());
+            rightLoc.setLongitude(subRight[j].getLocationLng());
             //Compare distances from device location to Machines
             if ((deviceLocation.distanceTo(leftLoc)) <= (deviceLocation.distanceTo(rightLoc))){
                 arr[k++] = subLeft[i++];
@@ -330,22 +361,32 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         //Creates basic (TEMPORARY) marker on ISU to show location.
-        LatLng startLocation = new LatLng(42.0266, -93.6465);
-
-        //Adds marker "startLocation" to the map. I used this location for two reasons.
-        //   1) Center of United States so any user doesn't feel out of place on launch.
-        //   2) It's where we are.
-        mMap.addMarker(new MarkerOptions().position(startLocation).title("Iowa State University"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(startLocation));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(42.0266, -93.6465)));
 
         //Adds Google Maps Marker in the ISU Caribou Coffee cafe..
-        mMap.addMarker(new MarkerOptions().position(hubMachine1)
-                .title("Hub: Coca-Cola Machine")
-                //Putting a new line after the title does not change anything. Its a different object than the snippet.
-                //Putting the \n before contents lowers it, but does not return it to the left hand side.
-                //I tried putting "\r" after \n but it does nothing as well.
-                .snippet("Contents: \n" + "- Coca-Cola\n" + "- Diet Coke\n" +
-                        "- Cherry Coke\n" + "- Sprite\n" + "- Powerade"));
+//        mMap.addMarker(new MarkerOptions().position(hubMachine1)
+//                .title("Hub: Coca-Cola Machine")
+//                //Putting a new line after the title does not change anything. Its a different object than the snippet.
+//                //Putting the \n before contents lowers it, but does not return it to the left hand side.
+//                //I tried putting "\r" after \n but it does nothing as well.
+//                .snippet("Contents: \n" + "- Coca-Cola\n" + "- Diet Coke\n" +
+//                        "- Cherry Coke\n" + "- Sprite\n" + "- Powerade"));
+
+//        for(Machine i : MachineDatabase) {
+//            if(i != null) {
+//                String snip = "Contents: \n";
+//                ArrayList<String> machineContents = i.getMachineContents();
+//                // Iterate over machine contents ArrayList for custom window popup.
+//                for (int j = 0; j < machineContents.size() - 1; j++) {
+//                    snip += (machineContents.get(j) + "\n");
+//                }
+//                // Last content so we don't want a new line after it.
+//                snip += machineContents.get(machineContents.size() - 1);
+//                mMap.addMarker(new MarkerOptions().position(new LatLng(i.getLocationLat(), i.getLocationLng()))
+//                        .title(i.getBuilding() + ": " + i.getType())
+//                        .snippet(snip));
+//            }
+//        }
         MyInfoWindow customInfo = new MyInfoWindow(this);
         mMap.setInfoWindowAdapter(customInfo);
 

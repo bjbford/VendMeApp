@@ -28,7 +28,6 @@ public class NewMachineLocationActivity extends MainActivity implements OnMapRea
     private Marker newMachine;
     private int markerCount;
     private Location myLocation;
-//    private Location deviceLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

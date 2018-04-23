@@ -7,13 +7,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Page that displays vending machine results as well as location on map from main page search area or search bar.
@@ -23,9 +24,12 @@ public class MachineSelection extends MainActivity {
 
     //Holds all of the vending machines and their location/distance from user.
     private ListView MachineList;
+    private TextView MachinesFound;
+
+    private Location myLocation;
 
     //Holds the names (Building Location) of each vending machine.
-    private List<String> vendingMachines;
+    private ArrayList<String> vendingMachines;
 
 
     @Override
@@ -39,15 +43,23 @@ public class MachineSelection extends MainActivity {
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_sel);
         mapFragment.getMapAsync(this);
 
+        Bundle bundle = getIntent().getExtras();
+        myLocation = new Location("");
+        myLocation.setLatitude(bundle.getDouble("lat"));
+        myLocation.setLongitude(bundle.getDouble("lng"));
+
         //TODO: Use Location.distanceBetween() method for approximate distances.
-        //List view filling. Only for show.
+
+        MachinesFound = (TextView) findViewById(R.id.MachinesFound);
+        MachinesFound.setText("  Machines Found: " + MainActivity.MachineResults.length + "  ");
 
         vendingMachines = new ArrayList<String>();
-        vendingMachines.add("Iowa State University                           0.3 m");
-        vendingMachines.add("The Hub                                                <0.1 m");
-        vendingMachines.add("Coover                                                    0.1 m");
-        vendingMachines.add("TESTING                                                    1.0 m");
-
+        for(Machine i : MainActivity.MachineResults){
+//            Location machineLoc = new Location(i.getBuilding());
+//            machineLoc.setLatitude(i.getLocationLat());
+//            machineLoc.setLongitude(i.getLocationLng());
+            vendingMachines.add(i.getBuilding());
+        }
         MachineList = (ListView) findViewById(R.id.ML);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
@@ -59,13 +71,14 @@ public class MachineSelection extends MainActivity {
         MachineList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 //Creation of intent object.
                 Intent intent = new Intent(MachineSelection.this, MachineDescription.class);
 
                 //Uses the position in the List View to tell which Vending Machine it is.
                 //   Passes its machine ID to the new activity.
                 intent.putExtra("MachineID", position);
+                intent.putExtra("lat",myLocation.getLatitude());
+                intent.putExtra("lng",myLocation.getLongitude());
 
                 //Starts activity.
                 MachineSelection.this.startActivity(intent);
@@ -85,27 +98,25 @@ public class MachineSelection extends MainActivity {
         mMap = googleMap;
 
         //Creates basic (TEMPORARY) marker on ISU to show location.
-        LatLng startLocation = new LatLng(42.0266, -93.6465);
-
-        //Adds marker "startLocation" to the map. I used this location for two reasons.
-        //   1) Center of United States so any user doesn't feel out of place on launch.
-        //   2) It's where we are.
-        mMap.addMarker(new MarkerOptions().position(startLocation).title("Iowa State University"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(startLocation));
-
-        //Adds Google Maps Marker in the ISU Caribou Coffee cafe..
-        mMap.addMarker(new MarkerOptions().position(hubMachine1)
-                .title("Hub: Coca-Cola Machine")
-                .snippet("Contents: \n" + "- Coca-Cola\n" + "- Diet Coke\n" +
-                        "- Cherry Coke\n" + "- Sprite\n" + "- Powerade"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(42.0266, -93.6465)));
+        for(Machine i : MainActivity.MachineResults) {
+            String snip = "Contents: \n";
+            ArrayList<String> machineContents = i.getMachineContents();
+            // Iterate over machine contents ArrayList for custom window popup.
+            for (int j = 0; j < machineContents.size() - 1;j++){
+                snip += (machineContents.get(j) + "\n");
+            }
+            // Last content so we don't want a new line after it.
+            snip += machineContents.get(machineContents.size()-1);
+            mMap.addMarker(new MarkerOptions().position(new LatLng(i.getLocationLat(),i.getLocationLng()))
+                    .title(i.getBuilding() + ": " + i.getType())
+                    .snippet(snip));
+        }
         MyInfoWindow customInfo = new MyInfoWindow(this);
         mMap.setInfoWindowAdapter(customInfo);
-
-        Location deviceLoc = startLocation(mMap);
 
         //Forces map to satellite view.
         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
     }
-
 }
