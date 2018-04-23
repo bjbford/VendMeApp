@@ -20,10 +20,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -48,8 +44,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                                                                 GoogleMap.OnMyLocationButtonClickListener,
                                                                 GoogleMap.OnMyLocationClickListener{
     // Local Database of Machines from MySQL server
-    public static Machine[] MachineDatabase;
-    public int machineCount=100;
+    public Machine[] MachineDatabase;
+    public int machineCount;
 
     //Google Maps Object.
     public GoogleMap mMap;
@@ -72,10 +68,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
 
 
-
-    private static final String REGISTER_URL = "http://proj-309-ss-3.cs.iastate.edu/android/v1/post.php";
-
-
     /**
      * Runs on application launch.
      */
@@ -84,46 +76,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
-        String  tag_string_req1 = "string_req1";
-
-        String url1 = "http://proj-309-ss-3.cs.iastate.edu/post1.php";
-
-
-
-        StringRequest strReq1 = new StringRequest(Request.Method.GET,
-                url1, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response1) {
-
-
-
-
-
-
-                machineCount = Integer.parseInt(response1.trim());
-
-
-               // int temp = MachineDatabase.length;
-               // Toast.makeText(getApplicationContext(),machineCount,Toast.LENGTH_LONG).show();
-
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-
-            }
-        });
-
-// Adding request to request queue
-        AppController.getInstance().addToRequestQueue(strReq1, tag_string_req1);
-
-
-
         // Obtain the SupportMapFragment. Allows use of onMapReady().
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -131,135 +83,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         searchBar = (EditText) findViewById(R.id.SearchBar);
 
         // Initialize Machine Database
-
+        machineCount = 0;
         MachineDatabase = new Machine[machineCount];
-        for(int i =0; i< MachineDatabase.length; i++){
-            MachineDatabase[i] = new Machine();
-        }
         // TODO: Pull all Machines from MySQl to local Database with method call, using Machine setters.
-
-
-
-
-
-
-//Machine m = new Machine(20,21,"blah","blah","blah","balh","blah");
-
-//MachineDatabase[0]=m;
-
-
-// Tag used to cancel the request
-        String  tag_string_req = "string_req";
-
-        String url = "http://proj-309-ss-3.cs.iastate.edu/post.php";
-
-
-
-        StringRequest strReq = new StringRequest(Request.Method.GET,
-                url, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-              //  ArrayList<String> sl = new ArrayList<String>();
-                String s = response;
-              //  sl.add(s);
-
-
-                    String[] parts=  s.split("/");
-              //  int c=0;
-for(int i=1; i<parts.length; i++) {
-   // String part1 = parts[0];
-    String part2 = parts[i];
-
-    String[] args = part2.split("#");
-
-    String contents[] = args[5].split(",");
-    ArrayList<String> contentsList = new ArrayList<>();
-
-    for(int j =0; j<contents.length; j++){
-        contentsList.add(contents[j]);
-    }
-
-    String prices[] = args[6].split(",");
-    ArrayList<String> pricesList = new ArrayList<>();
-
-    for(int k =0; k<prices.length; k++){
-        pricesList.add(prices[k]);
-    }
-
-
-   // Machine m = new Machine(args[0], args[1], args[2], Double.parseDouble(args[3]), Double.parseDouble(args[4]), contentsList, pricesList);
-
-   // MachineDatabase[i-1] = new Machine(args[0], args[1], args[2], Double.parseDouble(args[3]), Double.parseDouble(args[4]), contentsList, pricesList);
-
-    MachineDatabase[i-1].setBuilding(args[0]);
-    MachineDatabase[i-1].setLocationDescription(args[1]);
-    MachineDatabase[i-1].setType(args[2]);
-    MachineDatabase[i-1].setLocationLat(Double.parseDouble(args[3]));
-    MachineDatabase[i-1].setLocationLng(Double.parseDouble(args[4]));
-    MachineDatabase[i-1].setMachineContents(contentsList);
-    MachineDatabase[i-1].setMachinePrices(pricesList);
-}
-              // Toast.makeText(getApplicationContext(),MachineDatabase[2].getBuilding(),Toast.LENGTH_LONG).show();
-
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-
-            }
-        });
-
-// Adding request to request queue
-        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-
-
-
-
-
-
-        //TEST
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         //Defines settings object to be that of button "settingsBtn".
         settings = (Button) findViewById(R.id.settingsBtn);
@@ -269,6 +95,7 @@ for(int i=1; i<parts.length; i++) {
                 //Creates intent with the new submissions page.
                 Intent settings = new Intent(MainActivity.this,SubmitNewMachineActivity.class);
                 //Launches new activity.
+//                settings.putExtra("DeviceLocation",deviceLocation);
                 MainActivity.this.startActivity(settings);
             }
         });
@@ -351,12 +178,81 @@ for(int i=1; i<parts.length; i++) {
      */
     public Machine[] orderMachinesByDistance(Machine[] machines){
         Machine[] ordered = new Machine[machines.length];
-        //TODO: some sorting algorithm by distance.
-//        for(int i = 0;i < input.length;i++){
-//            Location.distanceBetween(deviceLocation.getLatitude(), deviceLocation.getLongitude(),
-//                    input[i].getLocationLat(), input[i].getLocationLng());
-//        }
+        //TODO: test mergesort on Machines.
+        merge_sort(ordered,0,ordered.length-1);
         return ordered;
+    }
+
+
+    /**
+     * Recursive merge sort algorithm to sort Machine by distance.
+     * @param arr
+     * @param left
+     * @param right
+     */
+    void merge_sort(Machine arr[], int left, int right){
+        if (left < right){
+            // Find the middle point
+            int mid = (left+right)/2;
+            // Sort first and second sub arrays
+            merge_sort(arr, left, mid);
+            merge_sort(arr , mid+1, right);
+            // Merge the sorted sub arrays
+            merge(arr, left, mid, right);
+        }
+    }
+
+
+    /**
+     * Helper function for the merge sort algorithm to merge sub arrays.
+     * @param arr
+     * @param left
+     * @param mid
+     * @param right
+     */
+    private void merge(Machine arr[], int left, int mid, int right){
+        // Find sizes of two subarrays to be merged
+        int leftSize = mid - left + 1;
+        int rightSize = right - mid;
+        // Temp subarrays
+        Machine subLeft[] = new Machine [leftSize];
+        Machine subRight[] = new Machine [rightSize];
+
+        //Copy data to left subarray
+        for (int i=0; i<leftSize; ++i){
+            subLeft[i] = arr[left + i];
+        }
+        //Copy data to right subarray
+        for (int j=0; j<rightSize; ++j){
+            subRight[j] = arr[mid + 1 + j];
+        }
+        // Initial indexes of first and second subarrays
+        int i = 0, j = 0;
+        // Initial index of merged subarray array
+        int k = left;
+        while (i < leftSize && j < rightSize){
+            Location leftLoc = new Location("");
+            leftLoc.setLatitude(subLeft[i].getLocationLat());
+            leftLoc.setLongitude(subLeft[i].getLocationLng());
+            Location rightLoc = new Location("");
+            rightLoc.setLatitude(subRight[i].getLocationLat());
+            rightLoc.setLongitude(subRight[i].getLocationLng());
+            //Compare distances from device location to Machines
+            if ((deviceLocation.distanceTo(leftLoc)) <= (deviceLocation.distanceTo(rightLoc))){
+                arr[k++] = subLeft[i++];
+            }
+            else{
+                arr[k++] = subRight[j++];
+            }
+        }
+        // Copy remaining elements of left sub array
+        while (i < leftSize){
+            arr[k++] = subLeft[i++];
+        }
+        // Copy remaining elements of right sub array
+        while (j < rightSize){
+            arr[k++] = subRight[j++];
+        }
     }
 
 
@@ -423,20 +319,30 @@ for(int i=1; i<parts.length; i++) {
      * Helper function to check fine location permission and request permission if not granted.
      */
     public Location startLocation(GoogleMap googleMap){
-        Location location;
+        Location locationGPS;
+        Location locationNet;
+        Location location = new Location("");
         if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED){
             //Request permission.
             ActivityCompat.requestPermissions(this,new String[]{
                     Manifest.permission.ACCESS_FINE_LOCATION},MY_PERMISSIONS_REQUEST_LOCATION);
-            location = null;
         }
         else{
             //Permission granted, so enable location.
             googleMap.setMyLocationEnabled(true);
             // gather location of the device
             LocationManager locMan = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            location = locMan.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            locationNet = locMan.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            locationGPS = locMan.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            // check if we have location from the network
+            if(locationNet != null){
+                location = locationNet;
+                // check if we have location from GPS (this is preferable)
+                if(locationGPS != null){
+                    location = locationGPS;
+                }
+            }
         }
         return location;
     }
@@ -461,6 +367,46 @@ for(int i=1; i<parts.length; i++) {
     public void onMyLocationClick(@NonNull Location location) {
         Toast.makeText(this, "Your Device's Current Location:\n" + location,
                 Toast.LENGTH_LONG).show();
+    }
+
+
+    private void register(String username, String password) {
+        String urlSuffix = "?username="+username+"&password="+password;
+        class RegisterUser extends AsyncTask<String, Void, String> {
+
+         // ProgressDialog loading;
+
+
+         /*   @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                loading = ProgressDialog.show(MainActivity.this, "Please Wait",null, true, true);
+            }
+            */
+
+            @Override
+            protected String doInBackground(String... params) {
+                String s = params[0];
+                BufferedReader bufferedReader = null;
+                try {
+                    URL url = new URL("http://proj-309-ss-3.cs.iastate.edu/android/v1/"+s);
+                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                    bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+                    String result;
+
+                    result = bufferedReader.readLine();
+
+                    return result;
+                }catch(Exception e){
+                    Toast.makeText(getApplicationContext(),"Check your Internet connection",Toast.LENGTH_SHORT).show();
+                    return null;
+                }
+            }
+        }
+
+        RegisterUser ru = new RegisterUser();
+        ru.execute(urlSuffix);
     }
 
 }
