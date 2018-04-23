@@ -20,10 +20,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -48,8 +44,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                                                                 GoogleMap.OnMyLocationButtonClickListener,
                                                                 GoogleMap.OnMyLocationClickListener{
     // Local Database of Machines from MySQL server
-    public static Machine[] MachineDatabase;
-    public int machineCount=100;
+    public Machine[] MachineDatabase;
+    public int machineCount;
 
     //Google Maps Object.
     public GoogleMap mMap;
@@ -72,7 +68,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
 
     private static final String REGISTER_URL = "http://proj-309-ss-3.cs.iastate.edu/android/v1/post.php";
-
 
     /**
      * Runs on application launch.
@@ -179,6 +174,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 //Creates intent with the new submissions page.
                 Intent settings = new Intent(MainActivity.this,SubmitNewMachineActivity.class);
                 //Launches new activity.
+//                settings.putExtra("DeviceLocation",deviceLocation);
                 MainActivity.this.startActivity(settings);
             }
         });
