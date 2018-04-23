@@ -20,6 +20,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -77,14 +81,14 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String  tag_string_req1 = "string_req1";
+        String tag_string_req1 = "string_req1";
         String url1 = "http://proj-309-ss-3.cs.iastate.edu/post1.php";
         StringRequest strReq1 = new StringRequest(Request.Method.GET,
                 url1, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
-                machineCount = Integer.parseInt(responsee.trim());
+                machineCount = Integer.parseInt(response.trim());
                // Toast.makeText(getApplicationContext(),machineCount,Toast.LENGTH_LONG).show();
 
             }
@@ -92,7 +96,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
             @Override
             public void onErrorResponse(VolleyError error) {
-
 
             }
         });
@@ -110,46 +113,29 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         // Tag used to cancel the request
-        String  tag_string_req = "string_req";
+        String tag_string_req = "string_req";
         String url = "http://proj-309-ss-3.cs.iastate.edu/post.php";
         StringRequest strReq = new StringRequest(Request.Method.GET,
                 url, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
-                String s = response;
+            String[] parts = response.split("/");
+            for(int i=1; i<parts.length; i++) {
+                String part2 = parts[i];
+                String[] args = part2.split("#");
+                // Machine m = new Machine(args[0], args[1], args[2], Double.parseDouble(args[3]), Double.parseDouble(args[4]), contentsList, pricesList);
+                // MachineDatabase[i-1] = new Machine(args[0], args[1], args[2], Double.parseDouble(args[3]), Double.parseDouble(args[4]), contentsList, pricesList);
 
-
-        String[] parts = response.split("/");
-        for(int i=1; i<parts.length; i++) {
-            String part2 = parts[i];
-            String[] args = part2.split("#");
-
-            String contents[] = args[5].split(",");
-            ArrayList<String> contentsList = new ArrayList<>();
-
-            for(int j =0; j<contents.length; j++){
-                contentsList.add(contents[j]);
+                MachineDatabase[i-1].setBuilding(args[0]);
+                MachineDatabase[i-1].setLocationDescription(args[1]);
+                MachineDatabase[i-1].setType(args[2]);
+                MachineDatabase[i-1].setLocationLat(Double.parseDouble(args[3]));
+                MachineDatabase[i-1].setLocationLng(Double.parseDouble(args[4]));
+                MachineDatabase[i-1].setMachineContents(args[5]);
+                MachineDatabase[i-1].setMachinePrices(args[6]);
             }
-
-            String prices[] = args[6].split(",");
-            ArrayList<String> pricesList = new ArrayList<>();
-
-            for(int k =0; k<prices.length; k++){
-                pricesList.add(prices[k]);
-            }
-            // Machine m = new Machine(args[0], args[1], args[2], Double.parseDouble(args[3]), Double.parseDouble(args[4]), contentsList, pricesList);
-            // MachineDatabase[i-1] = new Machine(args[0], args[1], args[2], Double.parseDouble(args[3]), Double.parseDouble(args[4]), contentsList, pricesList);
-
-            MachineDatabase[i-1].setBuilding(args[0]);
-            MachineDatabase[i-1].setLocationDescription(args[1]);
-            MachineDatabase[i-1].setType(args[2]);
-            MachineDatabase[i-1].setLocationLat(Double.parseDouble(args[3]));
-            MachineDatabase[i-1].setLocationLng(Double.parseDouble(args[4]));
-            MachineDatabase[i-1].setMachineContents(contentsList);
-            MachineDatabase[i-1].setMachinePrices(pricesList);
-        }
-              // Toast.makeText(getApplicationContext(),MachineDatabase[2].getBuilding(),Toast.LENGTH_LONG).show();
+                // Toast.makeText(getApplicationContext(),MachineDatabase[2].getBuilding(),Toast.LENGTH_LONG).show();
 
             }
         }, new Response.ErrorListener() {
@@ -174,7 +160,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 //Creates intent with the new submissions page.
                 Intent settings = new Intent(MainActivity.this,SubmitNewMachineActivity.class);
                 //Launches new activity.
-//                settings.putExtra("DeviceLocation",deviceLocation);
                 MainActivity.this.startActivity(settings);
             }
         });
@@ -449,42 +434,42 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    private void register(String username, String password) {
-        String urlSuffix = "?username="+username+"&password="+password;
-        class RegisterUser extends AsyncTask<String, Void, String> {
-
-         // ProgressDialog loading;
-
-
-         /*   @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                loading = ProgressDialog.show(MainActivity.this, "Please Wait",null, true, true);
-            }
-            */
-
-            @Override
-            protected String doInBackground(String... params) {
-                String s = params[0];
-                BufferedReader bufferedReader = null;
-                try {
-                    URL url = new URL("http://proj-309-ss-3.cs.iastate.edu/android/v1/"+s);
-                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
-                    bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
-
-                    String result;
-
-                    result = bufferedReader.readLine();
-
-                    return result;
-                }catch(Exception e){
-                    Toast.makeText(getApplicationContext(),"Check your Internet connection",Toast.LENGTH_SHORT).show();
-                    return null;
-                }
-            }
-        }
-
-        RegisterUser ru = new RegisterUser();
-        ru.execute(urlSuffix);
-    }
+//    private void register(String username, String password) {
+//        String urlSuffix = "?username="+username+"&password="+password;
+//        class RegisterUser extends AsyncTask<String, Void, String> {
+//
+//         // ProgressDialog loading;
+//
+//
+//         /*   @Override
+//            protected void onPreExecute() {
+//                super.onPreExecute();
+//                loading = ProgressDialog.show(MainActivity.this, "Please Wait",null, true, true);
+//            }
+//            */
+//
+//            @Override
+//            protected String doInBackground(String... params) {
+//                String s = params[0];
+//                BufferedReader bufferedReader = null;
+//                try {
+//                    URL url = new URL("http://proj-309-ss-3.cs.iastate.edu/android/v1/"+s);
+//                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+//                    bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+//
+//                    String result;
+//
+//                    result = bufferedReader.readLine();
+//
+//                    return result;
+//                }catch(Exception e){
+//                    Toast.makeText(getApplicationContext(),"Check your Internet connection",Toast.LENGTH_SHORT).show();
+//                    return null;
+//                }
+//            }
+//        }
+//
+//        RegisterUser ru = new RegisterUser();
+//        ru.execute(urlSuffix);
+//    }
 }

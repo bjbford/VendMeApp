@@ -38,10 +38,6 @@ public class NewMachineLocationActivity extends MainActivity implements OnMapRea
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map_newmachine);
         mapFragment.getMapAsync(this);
-
-        //Device location passed from main activity/map
-//        Bundle bundle = getIntent().getExtras();
-//        myLocation = bundle.getParcelable("DeviceLocation");
     }
 
     /**

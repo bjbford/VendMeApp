@@ -2,6 +2,8 @@ package ss_3.iastate.edu.vendme;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * Vending Machine Object.
@@ -101,7 +103,10 @@ public class Machine {
      * Setter that parses the input string and generates an ArrayList of the Machine's contents.
      */
     public void setMachineContents(String input){
-        contents = (ArrayList<String>) Arrays.asList(input.split(","));
+        String contentsArr[] = input.split(",");
+        for(String i : contentsArr){
+            contents.add(i);
+        }
     }
 
     /**
@@ -115,7 +120,10 @@ public class Machine {
      * Setter that parses the input string and generates an ArrayList of the Machine's prices.
      */
     public void setMachinePrices(String input){
-        prices = (ArrayList<String>) Arrays.asList(input.split(","));
+        String pricesArr[] = input.split(",");
+        for(String i: pricesArr){
+            prices.add(i);
+        }
     }
 
     /**
