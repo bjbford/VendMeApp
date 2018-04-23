@@ -54,13 +54,11 @@ public class NewMachineLocationActivity extends MainActivity implements OnMapRea
         markerCount = 0;
         //Creates basic (TEMPORARY) marker on ISU to show location.
         myMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(42.0266, -93.6465)));
-//        deviceLocation = startLocation(myMap);
         addNewMarker = (Button) findViewById(R.id.addMarkerBtn);
         submitMarker = (Button) findViewById(R.id.submitMarker);
         // gather location of the device
         myLocation = startLocation(myMap);
         final LatLng deviceLatLng = new LatLng(myLocation.getLatitude(),myLocation.getLongitude());
-//        final LatLng deviceLatLng = new LatLng(deviceLocation.getLatitude(),deviceLocation.getLongitude());
         addNewMarker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
