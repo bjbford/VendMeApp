@@ -100,7 +100,7 @@ public class Machine {
      * Setter that parses the input string and generates an ArrayList of the Machine's contents.
      */
     public void setMachineContents(String input){
-        String contentsArr[] = input.split(",");
+        String contentsArr[] = input.split(", ");
         for(String i : contentsArr){
             contents.add(i);
         }

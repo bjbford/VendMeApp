@@ -13,6 +13,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.math.RoundingMode;
@@ -28,8 +29,10 @@ public class MachineSelection extends MainActivity {
     //Holds all of the vending machines and their location/distance from user.
     private ListView MachineList;
     private TextView MachinesFound;
-
+    private double screenLat;
+    private double screenLng;
     private Location myLocation;
+    private float screenZoom;
 
     //Holds the names (Building Location) of each vending machine.
     private ArrayList<String> vendingMachines;
@@ -50,7 +53,9 @@ public class MachineSelection extends MainActivity {
         myLocation = new Location("");
         myLocation.setLatitude(bundle.getDouble("lat"));
         myLocation.setLongitude(bundle.getDouble("lng"));
-//        myLocation = startLocation(mMap);
+        screenLat = bundle.getDouble("centerLat");
+        screenLng = bundle.getDouble("centerLng");
+        screenZoom = bundle.getFloat("screenZoom");
 
         MachinesFound = (TextView) findViewById(R.id.MachinesFound);
         MachinesFound.setText("  Machines Found: " + MainActivity.MachineResults.length + "  ");
@@ -65,7 +70,13 @@ public class MachineSelection extends MainActivity {
             dfMiles.setRoundingMode(RoundingMode.CEILING);
             dfMiles.setMaximumFractionDigits(2);
             dfMiles.setMinimumIntegerDigits(0);
-            vendingMachines.add(i.getBuilding() + ": " + i.getType() + "                  "  + dfMiles.format(distMiles) + " miles");
+            String spaceString = "";
+            //Loop for proper spacing
+            for(int j = 0;j<(47-(i.getBuilding().length() + i.getType().length()));j++){
+                spaceString += " ";
+            }
+            vendingMachines.add(i.getBuilding() + ": " + i.getType() + spaceString
+                    + "~ " + dfMiles.format(distMiles) + " miles");
         }
         MachineList = (ListView) findViewById(R.id.ML);
 
@@ -104,16 +115,16 @@ public class MachineSelection extends MainActivity {
         mMap = googleMap;
 
         //Creates basic (TEMPORARY) marker on ISU to show location.
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(42.0266, -93.6465),13));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(screenLat, screenLng),screenZoom));
         for(Machine i : MainActivity.MachineResults) {
             String snip = "Contents: \n";
             ArrayList<String> machineContents = i.getMachineContents();
             // Iterate over machine contents ArrayList for custom window popup.
             for (int j = 0; j < machineContents.size() - 1;j++){
-                snip += (machineContents.get(j) + "\n");
+                snip += ("- " + machineContents.get(j) + "\n");
             }
             // Last content so we don't want a new line after it.
-            snip += machineContents.get(machineContents.size()-1);
+            snip += "- " + machineContents.get(machineContents.size()-1);
             mMap.addMarker(new MarkerOptions().position(new LatLng(i.getLocationLat(),i.getLocationLng()))
                     .title(i.getBuilding() + ": " + i.getType())
                     .snippet(snip));

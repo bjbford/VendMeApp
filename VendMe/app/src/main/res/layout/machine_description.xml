@@ -70,7 +70,7 @@
         android:layout_below="@+id/VendPic"
         android:layout_marginTop="8dp"
         android:background="@drawable/back"
-        android:text="@string/description_Contents_title"
+        android:text=" Machine Contents "
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/Contents"
@@ -114,10 +114,9 @@
         android:id="@+id/Item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/Price"
-        android:layout_alignBottom="@+id/Price"
-        android:layout_marginEnd="12dp"
-        android:layout_toStartOf="@+id/SelectedInfo"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/ContentsTitle"
+        android:layout_marginStart="46dp"
         android:text="Item"
         android:textAlignment="center"
         android:textStyle="bold" />
@@ -126,21 +125,10 @@
         android:id="@+id/Price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
         android:layout_below="@+id/ContentsTitle"
-        android:layout_marginTop="8dp"
-        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="65dp"
         android:text="Price"
-        android:textAlignment="center"
-        android:textStyle="bold"/>
-
-    <TextView
-        android:id="@+id/Stock"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/Price"
-        android:layout_alignBottom="@+id/Price"
-        android:layout_toEndOf="@+id/SelectedInfo"
-        android:text="Stock"
         android:textAlignment="center"
         android:textStyle="bold" />
 

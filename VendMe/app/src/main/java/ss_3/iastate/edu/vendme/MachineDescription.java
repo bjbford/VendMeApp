@@ -56,7 +56,7 @@ public class MachineDescription extends MachineSelection {
 
         //Populate TextViews with data from that machine.
         machine_Title = (TextView)findViewById(R.id.SelectedInfo);
-        machine_Title.setText("Building Name: " + MainActivity.MachineResults[MachineID].getBuilding());
+        machine_Title.setText(" Building Name: " + MainActivity.MachineResults[MachineID].getBuilding() + " ");
 
         machine_Location = (TextView)findViewById(R.id.Location);
         machine_Location.setText("Location Description: " + MainActivity.MachineResults[MachineID].getLocationDescription());
@@ -79,8 +79,15 @@ public class MachineDescription extends MachineSelection {
         //List view filling. Only for show.
         MachineContents = new ArrayList<String>();
         for(int i = 0;i<MainActivity.MachineResults[MachineID].getMachineContents().size();i++){
-            MachineContents.add(MainActivity.MachineResults[MachineID].getMachineContents().get(i) + "                                " +
-                    MainActivity.MachineResults[MachineID].getMachinePrices().get(i));
+            //Loop for proper spacing
+            String spaceString = "";
+            int contLength = MainActivity.MachineResults[MachineID].getMachineContents().get(i).length();
+            int priceLength = MainActivity.MachineResults[MachineID].getMachinePrices().get(i).length();
+            for(int j = 0;j<(55-(contLength + priceLength));j++){
+                spaceString += " ";
+            }
+            MachineContents.add(MainActivity.MachineResults[MachineID].getMachineContents().get(i) + spaceString +
+                    "$" + MainActivity.MachineResults[MachineID].getMachinePrices().get(i));
         }
         MachineList = (ListView) findViewById(R.id.Contents);
 

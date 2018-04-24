@@ -190,8 +190,8 @@ public class SubmitNewMachineActivity extends MainActivity implements View.OnCli
                 params.put("building", building);
                 params.put("type", machineType);
                 params.put("desc", description);
-                params.put("lat",newMachineLat); //wants a string here?
-                params.put("long",newMachineLng); //wants a string here?
+                params.put("lat",newMachineLat);
+                params.put("long",newMachineLng);
                 params.put("contents",contentsFinal);
                 params.put("prices",pricesFinal);
                 return params;

@@ -103,8 +103,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 for(int i=1; i<parts.length; i++) {
                     String part2 = parts[i];
                     String[] args = part2.split("#");
-                    // Machine m = new Machine(args[0], args[1], args[2], Double.parseDouble(args[3]), Double.parseDouble(args[4]), contentsList, pricesList);
-                    // MachineDatabase[i-1] = new Machine(args[0], args[1], args[2], Double.parseDouble(args[3]), Double.parseDouble(args[4]), contentsList, pricesList);
 
                     MachineDatabase[i-1].setBuilding(args[0]);
                     MachineDatabase[i-1].setType(args[1]);
@@ -178,6 +176,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 //Starts activity DisplayMessageActivity.
                 intent.putExtra("lat",deviceLocation.getLatitude());
                 intent.putExtra("lng",deviceLocation.getLongitude());
+                intent.putExtra("centerLat",mMap.getCameraPosition().target.latitude);
+                intent.putExtra("centerLng",mMap.getCameraPosition().target.longitude);
+                intent.putExtra("screenZoom",mMap.getCameraPosition().zoom);
                 MainActivity.this.startActivity(intent);
             }
         });
@@ -425,44 +426,4 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         Toast.makeText(this, "Your Device's Current Location:\n" + location,
                 Toast.LENGTH_LONG).show();
     }
-
-
-//    private void register(String username, String password) {
-//        String urlSuffix = "?username="+username+"&password="+password;
-//        class RegisterUser extends AsyncTask<String, Void, String> {
-//
-//         // ProgressDialog loading;
-//
-//
-//         /*   @Override
-//            protected void onPreExecute() {
-//                super.onPreExecute();
-//                loading = ProgressDialog.show(MainActivity.this, "Please Wait",null, true, true);
-//            }
-//            */
-//
-//            @Override
-//            protected String doInBackground(String... params) {
-//                String s = params[0];
-//                BufferedReader bufferedReader = null;
-//                try {
-//                    URL url = new URL("http://proj-309-ss-3.cs.iastate.edu/android/v1/"+s);
-//                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
-//                    bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
-//
-//                    String result;
-//
-//                    result = bufferedReader.readLine();
-//
-//                    return result;
-//                }catch(Exception e){
-//                    Toast.makeText(getApplicationContext(),"Check your Internet connection",Toast.LENGTH_SHORT).show();
-//                    return null;
-//                }
-//            }
-//        }
-//
-//        RegisterUser ru = new RegisterUser();
-//        ru.execute(urlSuffix);
-//    }
 }
