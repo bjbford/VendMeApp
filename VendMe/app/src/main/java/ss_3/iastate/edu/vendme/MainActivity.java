@@ -25,6 +25,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -81,31 +82,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        String tag_string_req1 = "string_req1";
-//        String url1 = "http://proj-309-ss-3.cs.iastate.edu/post1.php";
-//        StringRequest strReq1 = new StringRequest(Request.Method.GET,
-//                url1, new Response.Listener<String>() {
-//
-//            @Override
-//            public void onResponse(String response1) {
-//
-//                machineCount = Integer.parseInt(response1.trim());
-//                MachineDatabase = new Machine[machineCount];
-//                for(int i =0; i< MachineDatabase.length; i++) {
-//                    MachineDatabase[i] = new Machine();
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//
-//            }
-//        });
-//
-//        // Adding request to request queue
-//        AppController.getInstance().addToRequestQueue(strReq1, tag_string_req1);
-        // Obtain the SupportMapFragment. Allows use of onMapReady().
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
@@ -131,8 +107,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     // MachineDatabase[i-1] = new Machine(args[0], args[1], args[2], Double.parseDouble(args[3]), Double.parseDouble(args[4]), contentsList, pricesList);
 
                     MachineDatabase[i-1].setBuilding(args[0]);
-                    MachineDatabase[i-1].setLocationDescription(args[1]);
-                    MachineDatabase[i-1].setType(args[2]);
+                    MachineDatabase[i-1].setType(args[1]);
+                    MachineDatabase[i-1].setLocationDescription(args[2]);
                     MachineDatabase[i-1].setLocationLat(Double.parseDouble(args[3]));
                     MachineDatabase[i-1].setLocationLng(Double.parseDouble(args[4]));
                     MachineDatabase[i-1].setMachineContents(args[5]);
@@ -361,32 +337,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         //Creates basic (TEMPORARY) marker on ISU to show location.
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(42.0266, -93.6465)));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(42.0266, -93.6465),14));
 
-        //Adds Google Maps Marker in the ISU Caribou Coffee cafe..
-//        mMap.addMarker(new MarkerOptions().position(hubMachine1)
-//                .title("Hub: Coca-Cola Machine")
-//                //Putting a new line after the title does not change anything. Its a different object than the snippet.
-//                //Putting the \n before contents lowers it, but does not return it to the left hand side.
-//                //I tried putting "\r" after \n but it does nothing as well.
-//                .snippet("Contents: \n" + "- Coca-Cola\n" + "- Diet Coke\n" +
-//                        "- Cherry Coke\n" + "- Sprite\n" + "- Powerade"));
-
-//        for(Machine i : MachineDatabase) {
-//            if(i != null) {
-//                String snip = "Contents: \n";
-//                ArrayList<String> machineContents = i.getMachineContents();
-//                // Iterate over machine contents ArrayList for custom window popup.
-//                for (int j = 0; j < machineContents.size() - 1; j++) {
-//                    snip += (machineContents.get(j) + "\n");
-//                }
-//                // Last content so we don't want a new line after it.
-//                snip += machineContents.get(machineContents.size() - 1);
-//                mMap.addMarker(new MarkerOptions().position(new LatLng(i.getLocationLat(), i.getLocationLng()))
-//                        .title(i.getBuilding() + ": " + i.getType())
-//                        .snippet(snip));
-//            }
-//        }
         MyInfoWindow customInfo = new MyInfoWindow(this);
         mMap.setInfoWindowAdapter(customInfo);
 

@@ -2,7 +2,9 @@ package ss_3.iastate.edu.vendme;
 
 import android.content.Intent;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,6 +19,8 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.Intent.ACTION_VIEW;
 
 
 /**
@@ -33,6 +37,8 @@ public class MachineDescription extends MachineSelection {
     private TextView machine_Location;
     private TextView machine_Distance;
     private Location myLocation;
+    private Button WalkNav;
+    private Button BikeNav;
 
     //Holds the names (Building Location) of each vending machine.
     private List<String> MachineContents;
@@ -42,7 +48,7 @@ public class MachineDescription extends MachineSelection {
         setContentView(R.layout.machine_description);
 
         Intent Intent = getIntent();
-        int MachineID = Intent.getIntExtra("MachineID", 0);
+        final int MachineID = Intent.getIntExtra("MachineID", 0);
         Bundle bundle = getIntent().getExtras();
         myLocation = new Location("");
         myLocation.setLatitude(bundle.getDouble("lat"));
@@ -61,14 +67,14 @@ public class MachineDescription extends MachineSelection {
         machineLoc.setLongitude(MainActivity.MachineResults[MachineID].getLocationLng());
         double distMiles = myLocation.distanceTo(machineLoc)/1609.34;
         double distFeet = distMiles * 5280.0;
-        DecimalFormat dfmiles = new DecimalFormat("#.000");
-        dfmiles.setRoundingMode(RoundingMode.CEILING);
-        dfmiles.setMaximumFractionDigits(2);
-        dfmiles.setMinimumIntegerDigits(0);
+        DecimalFormat dfMiles = new DecimalFormat("#.000");
+        dfMiles.setRoundingMode(RoundingMode.CEILING);
+        dfMiles.setMaximumFractionDigits(2);
+        dfMiles.setMinimumIntegerDigits(0);
         NumberFormat nfFeet = DecimalFormat.getInstance();
         nfFeet.setMaximumFractionDigits(0);
         nfFeet.setRoundingMode(RoundingMode.CEILING);
-        machine_Distance.setText("Distance from Device:\n" + dfmiles.format(distMiles) + " miles\n~ " + nfFeet.format(distFeet) + " feet");
+        machine_Distance.setText("Distance from Device:\n" + dfMiles.format(distMiles) + " miles\n~ " + nfFeet.format(distFeet) + " feet");
 
         //List view filling. Only for show.
         MachineContents = new ArrayList<String>();
@@ -82,5 +88,51 @@ public class MachineDescription extends MachineSelection {
                 android.R.layout.simple_list_item_1, MachineContents);
 
         MachineList.setAdapter(adapter);
+
+        WalkNav = (Button) findViewById(R.id.WalkNavigate);
+        BikeNav = (Button) findViewById(R.id.BikeNavigate);
+
+
+        WalkNav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Create a Uri from an intent string. Use the result to create an Intent.
+                String walkTo = "google.navigation:q=" + Double.toString(MainActivity.MachineResults[MachineID].getLocationLat())
+                        + "," + Double.toString(MainActivity.MachineResults[MachineID].getLocationLng()) + "&mode=w";
+
+                Uri gmmIntentUri = Uri.parse(walkTo);
+
+                // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
+                Intent mapIntent = new Intent(ACTION_VIEW, gmmIntentUri);
+                // Make the Intent explicit by setting the Google Maps package
+                mapIntent.setPackage("com.google.android.apps.maps");
+
+                // Attempt to start an activity that can handle the Intent
+                if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(mapIntent);
+                }
+            }
+        });
+
+        BikeNav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Create a Uri from an intent string. Use the result to create an Intent.
+                String bikeTo = "google.navigation:q=" + Double.toString(MainActivity.MachineResults[MachineID].getLocationLat())
+                        + "," + Double.toString(MainActivity.MachineResults[MachineID].getLocationLng()) + "&mode=b";
+
+                Uri gmmIntentUri = Uri.parse(bikeTo);
+
+                // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
+                Intent mapIntent = new Intent(ACTION_VIEW, gmmIntentUri);
+                // Make the Intent explicit by setting the Google Maps package
+                mapIntent.setPackage("com.google.android.apps.maps");
+
+                // Attempt to start an activity that can handle the Intent
+                if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(mapIntent);
+                }
+            }
+        });
     }
 }

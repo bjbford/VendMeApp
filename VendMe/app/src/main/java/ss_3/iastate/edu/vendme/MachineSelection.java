@@ -14,6 +14,9 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -47,23 +50,26 @@ public class MachineSelection extends MainActivity {
         myLocation = new Location("");
         myLocation.setLatitude(bundle.getDouble("lat"));
         myLocation.setLongitude(bundle.getDouble("lng"));
-
-        //TODO: Use Location.distanceBetween() method for approximate distances.
+//        myLocation = startLocation(mMap);
 
         MachinesFound = (TextView) findViewById(R.id.MachinesFound);
         MachinesFound.setText("  Machines Found: " + MainActivity.MachineResults.length + "  ");
 
         vendingMachines = new ArrayList<String>();
         for(Machine i : MainActivity.MachineResults){
-//            Location machineLoc = new Location(i.getBuilding());
-//            machineLoc.setLatitude(i.getLocationLat());
-//            machineLoc.setLongitude(i.getLocationLng());
-            vendingMachines.add(i.getBuilding());
+            Location machineLoc = new Location(i.getBuilding());
+            machineLoc.setLatitude(i.getLocationLat());
+            machineLoc.setLongitude(i.getLocationLng());
+            double distMiles = myLocation.distanceTo(machineLoc)/1609.34;
+            DecimalFormat dfMiles = new DecimalFormat("#.000");
+            dfMiles.setRoundingMode(RoundingMode.CEILING);
+            dfMiles.setMaximumFractionDigits(2);
+            dfMiles.setMinimumIntegerDigits(0);
+            vendingMachines.add(i.getBuilding() + ": " + i.getType() + "                  "  + dfMiles.format(distMiles) + " miles");
         }
         MachineList = (ListView) findViewById(R.id.ML);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, vendingMachines);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, vendingMachines);
 
         MachineList.setAdapter(adapter);
 
@@ -98,7 +104,7 @@ public class MachineSelection extends MainActivity {
         mMap = googleMap;
 
         //Creates basic (TEMPORARY) marker on ISU to show location.
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(42.0266, -93.6465)));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(42.0266, -93.6465),13));
         for(Machine i : MainActivity.MachineResults) {
             String snip = "Contents: \n";
             ArrayList<String> machineContents = i.getMachineContents();
