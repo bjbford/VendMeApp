@@ -61,11 +61,19 @@ public class SubmitNewMachineActivity extends MainActivity implements View.OnCli
     private Bitmap imgBitmap;
     private ArrayList<String> contentsList, priceList;
     private LatLng newMachineLocation;
+    private double screenLat;
+    private double screenLng;
+    private float screenZoom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_machine_submission);
+
+        Bundle bundle = getIntent().getExtras();
+        screenLat = bundle.getDouble("centerLat");
+        screenLng = bundle.getDouble("centerLng");
+        screenZoom = bundle.getFloat("screenZoom");
 
         // Required EditText's
         editTextBuildingName = (EditText) findViewById(R.id.editTextBuildingName);
@@ -191,7 +199,7 @@ public class SubmitNewMachineActivity extends MainActivity implements View.OnCli
                 params.put("type", machineType);
                 params.put("desc", description);
                 params.put("lat",newMachineLat);
-                params.put("long",newMachineLng);
+                params.put("lng",newMachineLng);
                 params.put("contents",contentsFinal);
                 params.put("prices",pricesFinal);
                 return params;
@@ -232,6 +240,9 @@ public class SubmitNewMachineActivity extends MainActivity implements View.OnCli
         else if(view == machineLocation) {
             // When the user clicks button, prompt permission for location and open map to plot marker
             Intent intLocation = new Intent(SubmitNewMachineActivity.this,NewMachineLocationActivity.class);
+            intLocation.putExtra("centerLat",screenLat);
+            intLocation.putExtra("centerLng",screenLng);
+            intLocation.putExtra("screenZoom",screenZoom);
             startActivityForResult(intLocation, REQUEST_MARKER);
         }
     }

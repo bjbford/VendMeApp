@@ -23,11 +23,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
  */
 
 public class NewMachineLocationActivity extends MainActivity implements OnMapReadyCallback{
-    private GoogleMap myMap;
+
     private Button addNewMarker, submitMarker;
     private Marker newMachine;
     private int markerCount;
     private Location myLocation;
+    private double screenLat;
+    private double screenLng;
+    private float screenZoom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,11 @@ public class NewMachineLocationActivity extends MainActivity implements OnMapRea
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map_newmachine);
         mapFragment.getMapAsync(this);
+
+        Bundle bundle = getIntent().getExtras();
+        screenLat = bundle.getDouble("centerLat");
+        screenLng = bundle.getDouble("centerLng");
+        screenZoom = bundle.getFloat("screenZoom");
     }
 
     /**
@@ -45,21 +53,23 @@ public class NewMachineLocationActivity extends MainActivity implements OnMapRea
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        myMap = googleMap;
+        mMap = googleMap;
         markerCount = 0;
+        //Forces map to satellite view.
+        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         //Creates basic (TEMPORARY) marker on ISU to show location.
-        myMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(42.0266, -93.6465)));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(screenLat, screenLng),screenZoom));
         addNewMarker = (Button) findViewById(R.id.addMarkerBtn);
         submitMarker = (Button) findViewById(R.id.submitMarker);
         // gather location of the device
-        myLocation = startLocation(myMap);
+        myLocation = startLocation(mMap);
         final LatLng deviceLatLng = new LatLng(myLocation.getLatitude(),myLocation.getLongitude());
         addNewMarker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(markerCount < 1) {
                     // add new marker if there isn't one on the map already.
-                    newMachine = myMap.addMarker(new MarkerOptions()
+                    newMachine = mMap.addMarker(new MarkerOptions()
                             .title("NewMachine")
                             .position(deviceLatLng)
                             .draggable(true));

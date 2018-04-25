@@ -104,13 +104,15 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     String part2 = parts[i];
                     String[] args = part2.split("#");
 
-                    MachineDatabase[i-1].setBuilding(args[0]);
-                    MachineDatabase[i-1].setType(args[1]);
-                    MachineDatabase[i-1].setLocationDescription(args[2]);
-                    MachineDatabase[i-1].setLocationLat(Double.parseDouble(args[3]));
-                    MachineDatabase[i-1].setLocationLng(Double.parseDouble(args[4]));
-                    MachineDatabase[i-1].setMachineContents(args[5]);
-                    MachineDatabase[i-1].setMachinePrices(args[6]);
+                    if(args.length == 7) {
+                        MachineDatabase[i - 1].setBuilding(args[0]);
+                        MachineDatabase[i - 1].setType(args[1]);
+                        MachineDatabase[i - 1].setLocationDescription(args[2]);
+                        MachineDatabase[i - 1].setLocationLat(Double.parseDouble(args[3]));
+                        MachineDatabase[i - 1].setLocationLng(Double.parseDouble(args[4]));
+                        MachineDatabase[i - 1].setMachineContents(args[5]);
+                        MachineDatabase[i - 1].setMachinePrices(args[6]);
+                    }
                 }
                 for(Machine i : MachineDatabase) {
                     if(i.getBuilding() != "") {
@@ -153,6 +155,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 //Creates intent with the new submissions page.
                 Intent settings = new Intent(MainActivity.this,SubmitNewMachineActivity.class);
                 //Launches new activity.
+                settings.putExtra("centerLat",mMap.getCameraPosition().target.latitude);
+                settings.putExtra("centerLng",mMap.getCameraPosition().target.longitude);
+                settings.putExtra("screenZoom",mMap.getCameraPosition().zoom);
                 MainActivity.this.startActivity(settings);
             }
         });
